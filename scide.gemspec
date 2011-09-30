@@ -26,7 +26,8 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "lib/scide.rb"
+    "lib/scide.rb",
+    "scide.gemspec"
   ]
   s.homepage = "http://github.com/AlphaHydrae/scide"
   s.licenses = ["MIT"]
