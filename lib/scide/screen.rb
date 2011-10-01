@@ -1,10 +1,9 @@
 require 'tempfile'
 
-DEFAULT_HARDSTATUS = '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
-
 module Scide
 
   class Screen
+    DEFAULT_HARDSTATUS = '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
 
     def initialize config, cli, project_key
       @config, @cli = config, cli
@@ -35,12 +34,16 @@ module Scide
         s << "startup_message off\n"
         s << "hardstatus on\n"
         s << "hardstatus alwayslastline\n"
-        s << "hardstatus string '#{DEFAULT_HARDSTATUS}'\n\n"
+        s << "hardstatus string '#{hardstatus}'\n\n"
         s << @project.to_screen
       end
     end
 
     private
+
+    def hardstatus
+      @config.screen.try(:[], :hardstatus) || DEFAULT_HARDSTATUS
+    end
 
     def binary
       @config.screen.try(:[], :binary) || 'screen'
