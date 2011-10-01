@@ -1,10 +1,9 @@
 module Scide
 
   class Global
-    attr_accessor :path, :properties, :options
+    attr_accessor :path, :options
   
     def initialize contents
-      @properties = contents[:properties]
       @options = contents[:options]
 
       @path = contents[:path].try(:to_s) || File.expand_path('~')

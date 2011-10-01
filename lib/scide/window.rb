@@ -22,14 +22,14 @@ module Scide
 
     def init_from_hash contents
       @name = contents.delete :name
-      @command = Command.resolve contents, @project.properties, @project.options if contents.key? :command
+      @command = Command.resolve contents, @project.options if contents.key? :command
     end
 
     def init_from_string contents
       content_parts = contents.split /\s+/, 2
       @name = content_parts[0]
       if content_parts.length == 2
-        @command = Command.resolve content_parts[1], @project.properties, @project.options
+        @command = Command.resolve content_parts[1], @project.options
       end
     end
   end

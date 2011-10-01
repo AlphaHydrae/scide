@@ -1,7 +1,7 @@
 module Scide
 
   class Project
-    attr_accessor :properties, :options, :path
+    attr_accessor :options, :path
 
     def initialize contents, key, global
       @global = global
@@ -9,10 +9,9 @@ module Scide
       @path = contents[:path].try(:to_s) || key.to_s
       @path = File.join global.path, @path unless @path.match /^\//
 
-      @properties = global.properties.merge(contents[:properties] || {})
-      @properties['name'] ||= key
-
       @options = global.options.merge(contents[:options] || {})
+      @options[:name] ||= key
+      @options[:path] ||= @path
 
       @windows = []
       contents[:windows].each do |w|

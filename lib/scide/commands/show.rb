@@ -5,7 +5,7 @@ module Scide
     class Show < Scide::Command
 
       def to_screen
-        %|stuff "#{text_with_properties}"\n|
+        %|stuff "#{text_with_options}"\n|
       end
     end
   end

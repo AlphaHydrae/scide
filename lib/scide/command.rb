@@ -2,25 +2,24 @@ module Scide
 
   class Command
 
-    def self.resolve contents, properties = {}, options = {}
+    def self.resolve contents, options = {}
 
       if contents.kind_of? Hash
         options = options.merge contents[:options] if contents.key? :options
-        properties = properties.merge contents[:properties] if contents.key? :properties
       end
       
       klass, contents = if contents.kind_of? Hash
-        resolve_from_hash contents, properties, options
+        resolve_from_hash contents, options
       elsif contents.kind_of? String
-        resolve_from_string contents, properties, options
+        resolve_from_string contents, options
       end
 
-      klass.new contents, properties, build_options(options, klass)
+      klass.new contents, options
     end
 
-    def initialize contents, properties = {}, options = nil
+    def initialize contents, options = {}
       @text ||= contents
-      @properties, @options = properties, options
+      @options = (@options || {}).merge options
     end
 
     def to_screen
@@ -33,31 +32,20 @@ module Scide
 
     private
 
-    def self.resolve_from_hash contents, properties = {}, options = {}
+    def self.resolve_from_hash contents, options = {}
       klass = Scide::Commands.const_get contents[:command].downcase.capitalize
       [ klass, contents[:contents] ]
     end
 
-    def self.resolve_from_string contents, properties = {}, options = {}
+    def self.resolve_from_string contents, options = {}
       klass_name, text = contents.split /\s+/, 2
       klass = Scide::Commands.const_get klass_name.downcase.capitalize
       [ klass, text ]
     end
 
-    def self.build_options options, klass
-      klass_name = klass.name.demodulize.downcase
-      current_options = options.try(:[], klass_name)
-      current_klass = klass
-      while current_klass != Scide::Command and current_options.blank?
-        current_klass = current_klass.superclass
-        current_options = options.try(:[], current_klass.name.demodulize.downcase)
-      end
-      current_options
-    end
-
-    def text_with_properties
+    def text_with_options
       @text.dup.tap do |s|
-        @properties.each_pair do |key, value|
+        @options.each_pair do |key, value|
           s.gsub! /\%\{#{key}\}/, value
         end
       end
