@@ -2,19 +2,14 @@ module Scide
 
   class Command
 
-    def self.resolve contents, options = {}
-
+    def self.resolve window, contents
       if contents.kind_of? Hash
-        options = options.merge contents[:options] if contents.key? :options
-      end
-      
-      klass, contents = if contents.kind_of? Hash
-        resolve_from_hash contents, options
+        resolve_from_hash window, contents
       elsif contents.kind_of? String
-        resolve_from_string contents, options
+        resolve_from_string window, contents
+      else
+        raise ArgumentError, 'command must be a string or a hash'
       end
-
-      klass.new contents, options
     end
 
     def initialize contents, options = {}
@@ -32,15 +27,15 @@ module Scide
 
     private
 
-    def self.resolve_from_hash contents, options = {}
+    def self.resolve_from_hash window, contents
       klass = Scide::Commands.const_get contents[:command].downcase.capitalize
-      [ klass, contents[:contents] ]
+      klass.new contents[:contents], window.options.dup
     end
 
-    def self.resolve_from_string contents, options = {}
+    def self.resolve_from_string window, contents
       klass_name, text = contents.split /\s+/, 2
       klass = Scide::Commands.const_get klass_name.downcase.capitalize
-      [ klass, text ]
+      klass.new text, window.options.dup
     end
 
     def text_with_options
@@ -53,5 +48,6 @@ module Scide
   end
 end
 
+# load pre-defined commands
 deps_dir = File.join File.dirname(__FILE__), 'commands'
 %w( run tail show edit ).each{ |dep| require File.join(deps_dir, dep) }

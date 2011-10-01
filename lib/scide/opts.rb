@@ -1,7 +1,10 @@
 module Scide
 
+  # Pre-configured scide option parser.
   class Opts < Upoj::Opts
 
+    # Returns the scide option parser. Run scide with <tt>--usage</tt>
+    # to see available options.
     def initialize
       super({
         :banner => {
@@ -17,6 +20,10 @@ module Scide
       help!.usage!
     end
 
+    # Parses the given arguments.
+    #
+    # Causes scide to fail with an <tt>invalid_argument</tt> error (see Scide#fail)
+    # if an argument is invalid.
     def parse! args
       begin
         super args

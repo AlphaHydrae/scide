@@ -2,6 +2,9 @@ module Scide
 
   # Configuration of a GNU Screen window (name, command).
   class Window
+
+    # Window-specific options. Can be used by commands. See #initialize.
+    attr_reader :options
     
     # Returns a window for the given project.
     #
@@ -60,7 +63,7 @@ module Scide
       else
         raise ArgumentError, "window '#{contents}' must have a name" unless contents[:name].present?
         @name = contents[:name]
-        @command = Command.resolve contents, @options if contents.key? :command
+        @command = Command.resolve self, contents if contents.key? :command
       end
     end
 
@@ -71,7 +74,7 @@ module Scide
       @name = content_parts[0]
       @options ||= @project.options.dup
       if content_parts.length == 2
-        @command = Command.resolve content_parts[1], @options
+        @command = Command.resolve self, content_parts[1]
       end
     end
   end

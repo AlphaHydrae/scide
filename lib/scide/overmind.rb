@@ -20,8 +20,12 @@ module Scide
       Scide.fail :not_initialized, 'ERROR: call #brood to initialize' unless @initialized
     
       project_key = ARGV.shift
-      screen = Scide::Screen.new @config, @cli, project_key
-      screen.validate
+      unless @config.projects.key? project_key
+        Scide.fail :unknown_project, "ERROR: there is no project '#{project_key}' in configuration #{@config.file}."
+      end
+
+      screen = Scide::Screen.new @config.projects[project_key], @config.screen
+      screen.check_binary
 
       if @cli.funnel[:'dry-run']
         puts
