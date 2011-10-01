@@ -1,12 +1,8 @@
 require 'paint'
 require 'upoj-rb'
 
-dirname = File.dirname __FILE__
-deps_dir = File.join dirname, 'scide'
-VERSION_FILE = File.join dirname, '..', 'VERSION'
-
 module Scide
-  VERSION = File.open(VERSION_FILE, 'r').read
+  VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
   EXIT = {
     :unexpected => 1,
     :invalid_argument => 2,
@@ -27,4 +23,4 @@ module Scide
   end
 end
 
-%w( command config global opts overmind project screen window ).each{ |dep| require File.join(deps_dir, dep) }
+%w( command config global opts overmind project screen window ).each{ |dep| require File.join(File.dirname(__FILE__), 'scide', dep) }
