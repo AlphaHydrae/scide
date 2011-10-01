@@ -9,7 +9,7 @@ module Scide
 
     def brood
       @cli.parse! ARGV
-      @config.file = @cli.funnel['config'] if @cli.funnel.key? 'config'
+      @config.file = @cli.funnel[:config] if @cli.funnel.key? :config
       @config.load
       @initialized = true
       self
@@ -23,7 +23,7 @@ module Scide
       screen = Scide::Screen.new @config, @cli, project_key
       screen.validate
 
-      if @cli.funnel['dry-run']
+      if @cli.funnel[:'dry-run']
         puts
         puts Paint['COMMAND', :bold]
         puts "   #{screen.to_command}"
