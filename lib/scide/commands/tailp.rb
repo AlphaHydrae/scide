@@ -2,11 +2,11 @@ module Scide
 
   module Commands
 
-    class Dblog < Scide::Commands::Tail
+    class Tailp < Scide::Commands::Tail
       
       def initialize contents, properties = {}, options = nil
-        @text = properties[:db_log]
-        invalid_config('DBLOG requires property db_log') unless @text.present?
+        invalid_config("TAILP requires property #{contents}") unless properties.key? contents
+        @text = properties[contents]
         super contents, properties, options
       end
     end

@@ -66,4 +66,4 @@ module Scide
 end
 
 deps_dir = File.join File.dirname(__FILE__), 'commands'
-%w( run tail dblog show edit ).each{ |dep| require File.join(deps_dir, dep) }
+%w( run tail tailp show edit ).each{ |dep| require File.join(deps_dir, dep) }
