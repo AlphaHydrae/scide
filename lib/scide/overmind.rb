@@ -10,7 +10,7 @@ module Scide
     def brood
       @cli.parse! ARGV
       @config.file = @cli.funnel[:config] if @cli.funnel.key? :config
-      @config.load
+      @config.load!
       @initialized = true
       self
     end
