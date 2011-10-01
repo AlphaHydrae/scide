@@ -2,14 +2,19 @@ module Scide
 
   class Opts < Upoj::Opts
 
-    def initialize *args
-      super *args
+    def initialize
+      super({
+        :banner => {
+          :usage => '[OPTION]... PROJECT',
+          :description => 'generates GNU Screen configuration files.'
+        }
+      })
 
-      on '-c', '--config FILE'
-      on '--dry-run'
+      on '-c', '--config FILE', 'load configuration from FILE'
+      on '--dry-run', 'show what would be run but do not execute'
+      on('--version', 'show version and exit'){ puts "#{program_name} #{Scide::VERSION}"; exit 0 }
 
-      help!
-      usage!
+      help!.usage!
     end
 
     def parse! args
