@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "scide"
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables = ["scide"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     ".document",
@@ -24,17 +24,17 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "VERSION",
     "bin/scide",
     "lib/scide.rb",
     "lib/scide/command.rb",
-    "lib/scide/commands/dblog.rb",
     "lib/scide/commands/edit.rb",
     "lib/scide/commands/run.rb",
     "lib/scide/commands/show.rb",
     "lib/scide/commands/tail.rb",
+    "lib/scide/commands/tailp.rb",
     "lib/scide/config.rb",
     "lib/scide/global.rb",
     "lib/scide/opts.rb",
