@@ -1,3 +1,5 @@
+require 'tempfile'
+
 DEFAULT_HARDSTATUS = '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
 
 module Scide
