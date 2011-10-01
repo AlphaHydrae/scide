@@ -5,8 +5,8 @@ module Scide
     def self.resolve contents, properties = {}, options = {}
 
       if contents.kind_of? Hash
-        options = options.merge contents[:options] if options.key? :options
-        properties = properties.merge contents[:properties] if options.key? :properties
+        options = options.merge contents[:options] if contents.key? :options
+        properties = properties.merge contents[:properties] if contents.key? :properties
       end
       
       klass, contents = if contents.kind_of? Hash
