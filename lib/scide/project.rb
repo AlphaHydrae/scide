@@ -6,10 +6,10 @@ module Scide
     # The project key in the projects configuration hash.
     attr_reader :key
 
-    # The path where the project is located. See #initialize.
+    # The path where the project is located. See {#initialize}.
     attr_reader :path
 
-    # Project-specific options. Can be used by commands. See #initialize.
+    # Project-specific options. Can be used by commands. See {#initialize}.
     attr_reader :options
 
     # The GNU Screen windows of this project.
@@ -17,18 +17,18 @@ module Scide
 
     # Returns a project configuration.
     #
-    # If not given in the project hash, #path is built by joining
+    # If not given in the project hash, {#path} is built by joining
     # the global path and <tt>key</tt>.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>global</tt> - The global configuration.
     # * <tt>key</tt> - The key identifying the project. This is the
     #   key in the projects hash.
     # * <tt>contents</tt> - The project hash.
     #
-    # ==== Project Options
+    # == Project Options
     #
-    # #options is built by merging the options given in the project
+    # {#options} is built by merging the options given in the project
     # hash with the global options.
     #
     # The following default options are added if not given:

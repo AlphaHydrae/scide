@@ -13,7 +13,7 @@ module Scide
   
     # Builds global options.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>contents</tt> - The global options hash.
     def initialize contents
       raise ArgumentError, 'global configuration must be a hash' unless contents.kind_of? Hash

@@ -4,7 +4,7 @@ module Scide
     
     # Tails a file.
     #
-    # ==== Configuration Example
+    # == Configuration Example
     #   # this YAML configuration,
     #   projects:
     #     project1:
@@ -21,12 +21,12 @@ module Scide
       #
       # See class definition for examples.
       #
-      # ==== Arguments
+      # == Arguments
       # * <tt>contents</tt> - The file to tail.
       # * <tt>options</tt> - Options that can be used in the
       #   contents of the command.
       #
-      # ==== Options
+      # == Options
       # * <tt>tail => string</tt> - Arguments to tail.
       def initialize contents, options = {}
         super contents, options

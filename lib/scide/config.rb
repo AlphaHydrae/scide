@@ -12,35 +12,35 @@ module Scide
     # The file from which this configuration will be loaded.
     attr_accessor :file
     
-    # GNU Screen options. Accessible after calling #load!.
+    # GNU Screen options. Accessible after calling {#load!}.
     attr_reader :screen
 
-    # The global configuration. Accessible after calling #load!.
+    # The global configuration. Accessible after calling {#load!}.
     attr_reader :global
     
     # The project definitions (windows, option overrides, etc). Accessible
-    # after calling #load!.
+    # after calling {#load!}.
     attr_reader :projects
 
     # Returns an empty configuration.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>file</tt> - The file from which to load the configuration. If not
-    #   given, this defaults to DEFAULT_CONFIG_FILE.
+    #   given, this defaults to {DEFAULT_CONFIG_FILE}.
     def initialize file = nil
       @file = file.try(:to_s) || DEFAULT_CONFIG_FILE
     end
 
-    # Loads this configuration. This will read from #file and parse the contents
+    # Loads this configuration. This will read from {#file} and parse the contents
     # as YAML. Configuration elements can then be retrieved with #global,
     # #projects and #screen.
     #
-    # ==== Errors
-    # * <tt>config_not_found</tt> - #file does not exist.
-    # * <tt>config_not_readable</tt> - #file cannot be read by the user running scide.
-    # * <tt>malformed_config</tt> - #file contains malformed YAML.
-    # * <tt>invalid_config</tt> - #file contains invalid configuration (see README).
-    # * <tt>unexpected</tt> - #file could not be read.
+    # == Errors
+    # * <tt>config_not_found</tt> - {#file} does not exist.
+    # * <tt>config_not_readable</tt> - {#file} cannot be read by the user running scide.
+    # * <tt>malformed_config</tt> - {#file} contains malformed YAML.
+    # * <tt>invalid_config</tt> - {#file} contains invalid configuration (see README).
+    # * <tt>unexpected</tt> - {#file} could not be read.
     def load!
   
       Scide.fail :config_not_found, "ERROR: expected to find configuration at #{@file}" unless File.exists? @file
@@ -79,7 +79,7 @@ module Scide
 
     private
 
-    # Returns the contents of #file.
+    # Returns the contents of {#file}.
     def load_config
       File.open(@file, 'r').read
     end
@@ -89,7 +89,7 @@ module Scide
       YAML::load raw
     end
 
-    # Causes scide to fail with an <tt>invalid_config</tt> error (see Scide#fail).
+    # Causes scide to fail with an <tt>invalid_config</tt> error (see {Scide.fail}).
     # Builds a complete error message containing the full path to the
     # configuration file and the given message.
     def invalid_config msg

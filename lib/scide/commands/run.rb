@@ -4,7 +4,7 @@ module Scide
     
     # Runs a command.
     #
-    # ==== Configuration Example
+    # == Configuration Example
     #   # this YAML configuration,
     #   projects:
     #     project1:

@@ -22,7 +22,7 @@ module Scide
 
     # Parses the given arguments.
     #
-    # Causes scide to fail with an <tt>invalid_argument</tt> error (see Scide#fail)
+    # Causes scide to fail with an <tt>invalid_argument</tt> error (see {Scide.fail})
     # if an argument is invalid.
     def parse! args
       begin

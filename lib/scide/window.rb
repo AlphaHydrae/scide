@@ -4,33 +4,33 @@ module Scide
   class Window
 
     # The name of the window as it will shown in GNU Screen.
-    # See #initialize.
+    # See {#initialize}.
     attr_reader :name
 
     # The optional command that will be shown in this window.
     attr_reader :command
 
-    # Window-specific options. Can be used by commands. See #initialize.
+    # Window-specific options. Can be used by commands. See {#initialize}.
     attr_reader :options
     
     # Returns a window for the given project.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>project</tt> - The project owning this window.
     # * <tt>contents</tt> - The window configuration (String or Hash).
     #
-    # ==== String Initialization
+    # == String Initialization
     # The string must be in the format <tt>NAME [COMMAND]</tt> where
     # <tt>NAME</tt> is the window name and <tt>COMMAND</tt> (optional)
-    # is the command configuration (see Scide::Command).
+    # is the command configuration (see {Scide::Command}).
     #
-    # ==== Hash Initialization
+    # == Hash Initialization
     # The following options can be given:
     # * <tt>:name => string</tt> - The window name.
     # * <tt>:options => hash</tt> - Window-specific options (will be
     #   merged to the project options).
     # * <tt>:command => string</tt> - The command to use for this window
-    #   (will be built using Scide::Command#resolve).
+    #   (will be built using {Scide::Command.resolve}).
     # * <tt>:string => string</tt> - If given, <tt>:name</tt> and <tt>:command</tt>
     #   are ignored and string initialization will be performed with <tt>string</tt>.
     #   <tt>:options</tt> can still be used to override project options.
@@ -49,7 +49,7 @@ module Scide
     # Returns a representation of this window as a GNU Screen
     # configuration frament.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>index</tt> - The position of the window (zero-based).
     def to_screen index
       String.new.tap do |s|
@@ -60,7 +60,7 @@ module Scide
 
     private
 
-    # Initializes this window from a hash. See #initialize for options.
+    # Initializes this window from a hash. See {#initialize} for options.
     def init_from_hash! contents
       raise ArgumentError, "options of window '#{@name}' must be a hash" unless contents[:options].nil? or contents[:options].kind_of?(Hash)
       @options = @project.options.dup.merge(contents[:options] || {})
@@ -74,7 +74,7 @@ module Scide
       end
     end
 
-    # Initializes this window from a string. See #initialize for format.
+    # Initializes this window from a string. See {#initialize} for format.
     def init_from_string! contents
       raise ArgumentError, "window '#{contents}' must not be an empty string" unless contents.present?
       content_parts = contents.split /\s+/, 2

@@ -47,7 +47,7 @@ namespace :doc do
     YARD::Rake::YardocTask.new(:generate) do |yt|
       yt.files   = Dir.glob(File.join(project_root, 'lib', '**', '*.rb')) + 
                    [ File.join(project_root, 'README.md') ]
-      yt.options = ['--output-dir', doc_destination, '--readme', 'README.md']
+      yt.options = ['--output-dir', doc_destination, '--readme', 'README.md', '--private', '--protected']
     end
   rescue LoadError
     desc "Generate YARD Documentation"

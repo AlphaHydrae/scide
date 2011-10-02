@@ -4,7 +4,7 @@ module Scide
 
     # Edits a file with the default editor (<tt>$EDITOR</tt>).
     #
-    # ==== Configuration Example
+    # == Configuration Example
     #   # this YAML configuration,
     #   projects:
     #     project1:
@@ -21,12 +21,12 @@ module Scide
       #
       # See class definition for examples.
       #
-      # ==== Arguments
+      # == Arguments
       # * <tt>contents</tt> - The file to edit.
       # * <tt>options</tt> - Options that can be used in the contents
       #   of the command.
       #
-      # ==== Options
+      # == Options
       # * <tt>:edit => string</tt> - Arguments to the editor.
       def initialize contents, options = {}
         super contents, options

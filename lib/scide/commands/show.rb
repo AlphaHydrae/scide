@@ -4,7 +4,7 @@ module Scide
     
     # Prepares and shows a command but do not run it.
     #
-    # ==== Configuration Example
+    # == Configuration Example
     #   # this YAML configuration,
     #   projects:
     #     project1:
@@ -18,7 +18,7 @@ module Scide
     class Show < Scide::Command
 
       # Returns a configuration fragment that will show
-      # this command in a GNU \Screen window without running it.
+      # this command in a GNU Screen window without running it.
       # This will use screen's <tt>stuff</tt> command to
       # put the text in the window.
       def to_screen

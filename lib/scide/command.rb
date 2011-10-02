@@ -2,7 +2,7 @@ module Scide
 
   # A command to be used in a GNU Screen window. There are several
   # command implementations (show command, run command, tail file, etc).
-  # See under Scide::Commands.
+  # See under {Scide::Commands}.
   class Command
 
     # The options given to this command. These are built by merging
@@ -11,23 +11,23 @@ module Scide
 
     # Returns a new command for the given window.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>window</tt> - The window in which the command will be used.
-    #   Command options are retrieved from Scide::Window#options. See
-    #   #initialize.
+    #   Command options are retrieved from {Scide::Window#options}. See
+    #   {#initialize}.
     # * <tt>contents</tt> - The command configuration (String or Hash).
     #
-    # ==== String Initialization
+    # == String Initialization
     # The string must be in the format <tt>COMMAND [CONTENTS]</tt>.
     #
     # <tt>TYPE</tt> is the name of the command class under
-    # Scide::Commands, in uppercase camelcase. For example, <tt>TAIL</tt>
-    # corresponds to Scide::Commands::Tail, <tt>MY_COMMAND</tt> would
-    # correspond to Scide::Commands::MyCommand.
+    # {Scide::Commands}, in uppercase camelcase. For example, <tt>TAIL</tt>
+    # corresponds to {Scide::Commands::Tail}, <tt>MY_COMMAND</tt> would
+    # correspond to <tt>Scide::Commands::MyCommand</tt>.
     #
     # <tt>CONTENTS</tt> is the contents of the command.
     #
-    # ==== Hash Initialization
+    # == Hash Initialization
     # The following options can be given:
     # * <tt>:command => string</tt> is the same <tt>COMMAND</tt> as
     #   for string initialization above.
@@ -47,11 +47,11 @@ module Scide
 
     # Returns a new command with the given options.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>contents</tt> - The contents of the command. Typically this
     #   is only a string, but more advanced commands might be initialized
     #   with arrays or hashes. By default, the contents can be retrieved
-    #   as a string with #text_with_options.
+    #   as a string with {#text_with_options}.
     # * <tt>options</tt> - Options that can be used in the string contents
     #   of the command. See #text_with_options.
     def initialize contents, options = {}
@@ -75,7 +75,7 @@ module Scide
 
     # Returns the text of this command with filtered option placeholders.
     #
-    # ==== Examples
+    # == Examples
     #   com_text = 'tail %{tail} -f file.txt -c %{foo}'
     #   com = Scide::Command.new com_text, :tail => '-n 1000', :foo => 400
     #   
@@ -91,7 +91,7 @@ module Scide
     private
 
     # Returns a new command for the given window. The given
-    # contents are a hash. See Scide::Command.resolve.
+    # contents are a hash. See {Scide::Command.resolve}.
     def self.resolve_from_hash window, contents
       begin
         klass = Scide::Commands.const_get contents[:command].downcase.camelize
@@ -102,7 +102,7 @@ module Scide
     end
 
     # Returns a new command for the given window. The given
-    # contents are a string. See Scide::Command.resolve.
+    # contents are a string. See {Scide::Command.resolve}.
     def self.resolve_from_string window, contents
       klass_name, text = contents.split /\s+/, 2
       begin

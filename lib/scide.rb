@@ -8,17 +8,6 @@ module Scide
   VERSION = File.open(File.join(File.dirname(__FILE__), '..', 'VERSION'), 'r').read
 
   # Exit status codes.
-  #
-  # ==== Codes
-  # * <tt>unexpected</tt> - 1.
-  # * <tt>invalid_argument</tt> - 2.
-  # * <tt>not_initialized</tt> - 3.
-  # * <tt>screen_not_found</tt> - 4.
-  # * <tt>config_not_found</tt> - 10.
-  # * <tt>config_not_readable</tt> - 11.
-  # * <tt>malformed_config</tt> - 12.
-  # * <tt>invalid_config</tt> - 13.
-  # * <tt>unknown_project</tt> - 14.
   EXIT = {
     :unexpected => 1,
     :invalid_argument => 2,
@@ -32,7 +21,7 @@ module Scide
   }
 
   # Prints a message on <tt>stderr</tt> and exits.
-  # If #condition is a key from #EXIT, the corresponding value
+  # If <tt>condition</tt> is a key from {EXIT}, the corresponding value
   # will be used as the exit code. Otherwise, scide exits with
   # status 1.
   def self.fail condition, msg
@@ -48,20 +37,22 @@ module Scide
 
   # By default, scide is meant to be used as a standalone script
   # and exits if an error occurs. If <tt>exit_on_fail</tt> is
-  # false, a Scide::Error will be raised instead. Scide can then
+  # false, a {Scide::Error} will be raised instead. Scide can then
   # be used by another script.
   def self.exit_on_fail= exit_on_fail
     @@exit_on_fail = exit_on_fail
   end
 
   # Indicates whether scide is configured to exit on failure.
-  # See Scide.exit_on_fail=.
+  # See {Scide.exit_on_fail=}.
   def self.exit_on_fail
     @@exit_on_fail
   end
 
-  # Scide error. Can be raised if #exit_on_fail is set to false.
+  # Scide error. Can be raised if {exit_on_fail} is set to false.
   class Error < StandardError
+
+    # A symbol indicating the error type. See {EXIT}.
     attr_reader :condition
 
     # Returns a new error.

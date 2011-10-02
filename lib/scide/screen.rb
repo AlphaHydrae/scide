@@ -14,14 +14,14 @@ module Scide
 
     # Returns a screen configuration for the given project.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>project</tt> - The project.
     # * <tt>options</tt> - Screen-specific options (see below).
     #
-    # ==== Options
+    # == Options
     # * <tt>binary</tt> - Screen binary (defaults to <tt>screen</tt>).
     # * <tt>args</tt> - Command-line arguments that will be given to screen (e.g. <tt>-U</tt> for unicode).
-    # * <tt>hardstatus</tt> - Hardstatus line configuration (defaults to #DEFAULT_HARDSTATUS).
+    # * <tt>hardstatus</tt> - Hardstatus line configuration (defaults to {DEFAULT_HARDSTATUS}).
     def initialize project, options
       raise ArgumentError, 'screen configuration must be a hash' unless options.nil? or options.kind_of?(Hash)
 
@@ -31,7 +31,7 @@ module Scide
 
     # Returns the command that will be used to run screen with this configuration.
     #
-    # ==== Arguments
+    # == Arguments
     # * <tt>tmp_file</tt> - The temporary file in which the configuration will be stored.
     #   (Optional for dry-run.)
     def to_command tmp_file = 'TEMPORARY_FILE'
@@ -39,7 +39,7 @@ module Scide
     end
 
     # Verifies that the screen binary is there. If not, causes scide
-    # to fail with a <tt>screen_not_found</tt> error (see Scide#fail}.
+    # to fail with a <tt>screen_not_found</tt> error (see {Scide.fail}).
     def check_binary
       Scide.fail :screen_not_found, "ERROR: #{binary} not found" unless system("which #{binary}", { [ :out, :err ] => :close })
     end
@@ -56,7 +56,7 @@ module Scide
     end
 
     # Returns the screen hardstatus line given as option, or
-    # the default #DEFAULT_HARDSTATUS.
+    # the default {DEFAULT_HARDSTATUS}.
     def hardstatus
       @options[:hardstatus].try(:to_s) || DEFAULT_HARDSTATUS
     end
