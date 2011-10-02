@@ -9,3 +9,7 @@
 
 * allow to load configuration from hash
 * interactive configuration generation
+
+## Specifications
+
+* find a way to stub puts (opts version & banner)
