@@ -36,11 +36,38 @@ module Scide
   # will be used as the exit code. Otherwise, scide exits with
   # status 1.
   def self.fail condition, msg
-    puts
-    warn Paint[msg, :yellow]
-    puts
-    EXIT.key?(condition) ? exit(EXIT[condition]) : exit(1)
+    if @@exit_on_fail
+      puts
+      warn Paint[msg, :yellow]
+      puts
+      EXIT.key?(condition) ? exit(EXIT[condition]) : exit(1)
+    else
+      raise Scide::Error.new condition, msg
+    end
   end
+
+  # By default, scide is meant to be used as a standalone script
+  # and exits if an error occurs. If <tt>exit_on_fail</tt> is
+  # false, a Scide::Error will be raised instead. Scide can then
+  # be used by another script.
+  def self.exit_on_fail= exit_on_fail
+    @@exit_on_fail = exit_on_fail
+  end
+
+  # Scide error. Can be raised if #exit_on_fail is set to false.
+  class Error < StandardError
+    attr_reader :condition
+
+    # Returns a new error.
+    def initialize condition, msg
+      super msg
+      @condition = condition
+    end
+  end
+
+  private
+
+  @@exit_on_fail = true
 end
 
 # load scide components
