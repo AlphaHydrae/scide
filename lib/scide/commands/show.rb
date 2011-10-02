@@ -22,7 +22,7 @@ module Scide
       # This will use screen's <tt>stuff</tt> command to
       # put the text in the window.
       def to_screen
-        %|stuff "#{text_with_options}"\n|
+        %|stuff "#{text_with_options}"|
       end
     end
   end

@@ -46,8 +46,8 @@ module Scide
     # * <tt>index</tt> - The position of the window (zero-based).
     def to_screen index
       String.new.tap do |s|
-        s << "screen -t #{@name} #{index}\n"
-        s << @command.to_screen if @command
+        s << "screen -t #{@name} #{index}"
+        s << "\n#{@command.to_screen}" if @command
       end
     end
 
