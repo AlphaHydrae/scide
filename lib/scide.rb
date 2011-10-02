@@ -54,6 +54,12 @@ module Scide
     @@exit_on_fail = exit_on_fail
   end
 
+  # Indicates whether scide is configured to exit on failure.
+  # See Scide.exit_on_fail=.
+  def self.exit_on_fail
+    @@exit_on_fail
+  end
+
   # Scide error. Can be raised if #exit_on_fail is set to false.
   class Error < StandardError
     attr_reader :condition

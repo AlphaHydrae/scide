@@ -31,6 +31,14 @@ class SpecHelper
       end
     end
   end
+
+  def self.should_fail exit_on_fail, condition, msg
+    if exit_on_fail
+      "should exit with status #{Scide::EXIT[condition]} #{msg}"
+    else
+      "should raise an error with condition #{condition} #{msg}"
+    end
+  end
 end
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))

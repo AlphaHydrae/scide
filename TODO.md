@@ -7,6 +7,7 @@
 * replace default hashes by HashWithIndifferentAccess
 * make all options/contents parameters optional
 * extract tempfile management into separate runner class
+* find a way to check whether a path is absolute (cross-platform)
 
 ## New Features
 
