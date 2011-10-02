@@ -33,7 +33,7 @@ describe Scide::Command do
     
     it "should resolve command with a string" do
       com = Scide::Command.resolve @window, 'SHOW fubar'
-      com.should be_a_kind_of(Scide::Commands::Show)
+      com.should be_a(Scide::Commands::Show)
     end
 
     it "should use second part of string as contents when resolving a command with a string" do
@@ -43,7 +43,7 @@ describe Scide::Command do
 
     it "should resolve command with a hash" do
       com = Scide::Command.resolve @window, :command => 'SHOW', :contents => 'fubar'
-      com.should be_a_kind_of(Scide::Commands::Show)
+      com.should be_a(Scide::Commands::Show)
     end
 
     it "should give duplicated window options to the resolved string command" do
@@ -62,12 +62,12 @@ describe Scide::Command do
 
     it "should resolve camel-case command class names with a string" do
       com = Scide::Command.resolve @window, 'FU_BAR'
-      com.should be_a_kind_of(Scide::Commands::FuBar)
+      com.should be_a(Scide::Commands::FuBar)
     end
 
     it "should resolve camel-case command class names with a hash" do
       com = Scide::Command.resolve @window, :command => 'FU_BAR'
-      com.should be_a_kind_of(Scide::Commands::FuBar)
+      com.should be_a(Scide::Commands::FuBar)
     end
 
     it "should raise an error when type of contents is unknown" do

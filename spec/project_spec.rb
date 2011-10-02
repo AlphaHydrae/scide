@@ -86,14 +86,14 @@ describe Scide::Project do
 
     it "should create five windows" do
       @project.windows.length.should == 5
-      @project.windows.each{ |w| w.should be_a_kind_of(Scide::Window) }
+      @project.windows.each{ |w| w.should be_a(Scide::Window) }
     end
 
     it "should create the correct commands" do
-      @project.windows[0].command.should be_a_kind_of(Scide::Commands::Edit)
-      @project.windows[1].command.should be_a_kind_of(Scide::Commands::Show)
-      @project.windows[2].command.should be_a_kind_of(Scide::Commands::Tail)
-      @project.windows[3].command.should be_a_kind_of(Scide::Commands::Run)
+      @project.windows[0].command.should be_a(Scide::Commands::Edit)
+      @project.windows[1].command.should be_a(Scide::Commands::Show)
+      @project.windows[2].command.should be_a(Scide::Commands::Tail)
+      @project.windows[3].command.should be_a(Scide::Commands::Run)
       @project.windows[4].command.should be_nil
     end
 

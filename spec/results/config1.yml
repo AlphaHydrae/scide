@@ -1,0 +1,14 @@
+screen:
+  hardstatus: 'dummy'
+global:
+  path: '/tmp'
+projects:
+  project1:
+    windows:
+      - 'window1 EDIT'
+      - name: 'window2'
+        command: 'SHOW'
+        contents: 'ssh example.com'
+      - 'window3 TAIL file.txt'
+      - string: 'window4 RUN ls -la'
+      - 'window5'

@@ -47,14 +47,14 @@ module Scide
       Scide.fail :config_not_readable, "ERROR: configuration #{@file} is not readable" unless File.readable? @file
 
       begin
-        raw_config = File.open(@file, 'r').read
+        raw_config = load_config
       rescue StandardError => err
         Scide.fail :unexpected, "ERROR: could not read configuration #{@file}"
       end
 
       begin
-        @config = YAML::load raw_config
-      rescue StandardError => err
+        @config = parse_config raw_config
+      rescue SyntaxError => err
         Scide.fail :malformed_config, "ERROR: could not parse configuration #{@file}\n   #{err}"
       end
 
@@ -67,9 +67,9 @@ module Scide
       invalid_config 'projects configuration must be a hash' unless @config[:projects].nil? or @config[:projects].kind_of?(Hash)
 
       begin
-        @screen = @config[:screen]
+        @screen = @config[:screen] || HashWithIndifferentAccess.new
         @global = Scide::Global.new @config[:global]
-        @projects = @config[:projects].inject(HashWithIndifferentAccess.new) do |memo,obj|
+        @projects = (@config[:projects] || {}).inject(HashWithIndifferentAccess.new) do |memo,obj|
           memo[obj[0]] = Scide::Project.new @global, obj[0], obj[1]; memo
         end
       rescue ArgumentError => err
@@ -78,6 +78,16 @@ module Scide
     end
 
     private
+
+    # Returns the contents of #file.
+    def load_config
+      File.open(@file, 'r').read
+    end
+
+    # Returns the parsed configuration.
+    def parse_config raw
+      YAML::load raw
+    end
 
     # Causes scide to fail with an <tt>invalid_config</tt> error (see Scide#fail).
     # Builds a complete error message containing the full path to the

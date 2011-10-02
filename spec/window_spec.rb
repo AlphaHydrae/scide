@@ -16,7 +16,7 @@ describe Scide::Window do
 
     it "should create the correct command" do
       win = Scide::Window.new @project, 'fubar EDIT'
-      win.command.should be_a_kind_of(Scide::Commands::Edit)
+      win.command.should be_a(Scide::Commands::Edit)
     end
 
     it "should be initializable with a name and a command with no contents" do
@@ -44,7 +44,7 @@ describe Scide::Window do
 
     it "should create the correct command" do
       win = Scide::Window.new @project, :name => 'fubar', :command => 'EDIT'
-      win.command.should be_a_kind_of(Scide::Commands::Edit)
+      win.command.should be_a(Scide::Commands::Edit)
     end
 
     it "should be initializable with a name and a command with no contents" do
@@ -72,7 +72,7 @@ describe Scide::Window do
 
       it "should create the correct command" do
         win = Scide::Window.new @project, :string => 'fubar EDIT'
-        win.command.should be_a_kind_of(Scide::Commands::Edit)
+        win.command.should be_a(Scide::Commands::Edit)
       end
 
       it "should be initializable with a name and a command with no contents" do
