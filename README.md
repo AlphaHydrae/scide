@@ -16,8 +16,8 @@ Then use it on the command line:
     scide --version
     scide my_project
 
-__Interactive configuration will be introduced in v0.2.*__
-__Until then, the configuration file must be prepared manually before using scide__
+__Interactive configuration will be introduced in v0.2.*.__
+__Until then, the configuration file must be prepared manually before using scide.__
 
 ## Configuration File
 
