@@ -18,3 +18,4 @@
 ## Specifications
 
 * find a way to stub puts (opts version & banner)
+* use rspec 2 shared examples
