@@ -34,6 +34,12 @@ module Scide
       Scide.fail :not_initialized, 'ERROR: call #brood to initialize.' unless @initialized
     
       project_key = ARGV.shift
+      
+      if project_key.blank?
+        available_projects = @config.projects.keys.join(', ')
+        Scide.fail :invalid_argument, "You must choose a project. Available projects: #{available_projects}."
+      end
+
       unless @config.projects.key? project_key
         Scide.fail :unknown_project, "ERROR: there is no project '#{project_key}' in configuration #{@config.file}."
       end

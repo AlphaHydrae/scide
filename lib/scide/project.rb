@@ -3,6 +3,9 @@ module Scide
   # Scide configuration for one project.
   class Project
 
+    # The project key in the projects configuration hash.
+    attr_reader :key
+
     # The path where the project is located. See #initialize.
     attr_reader :path
 
@@ -33,7 +36,7 @@ module Scide
       raise ArgumentError, "windows of project '#{key}' must be an array" unless contents[:windows].nil? or contents[:windows].kind_of?(Array)
       raise ArgumentError, "options of project '#{key}' must be a hash" unless contents[:options].nil? or contents[:options].kind_of?(Hash)
 
-      @global = global
+      @global, @key = global, key
 
       # path defaults to project key
       @path = contents[:path].try(:to_s) || key.to_s
