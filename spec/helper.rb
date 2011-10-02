@@ -1,5 +1,9 @@
 require 'rubygems'
 require 'bundler'
+require 'simplecov'
+
+# test coverage
+SimpleCov.start
 
 begin
   Bundler.setup(:default, :development)
