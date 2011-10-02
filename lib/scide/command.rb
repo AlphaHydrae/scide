@@ -79,7 +79,7 @@ module Scide
     def text_with_options
       @text.dup.tap do |s|
         @options.each_pair do |key, value|
-          s.gsub! /\%\{#{Regexp.escape key}\}/, value
+          s.gsub! /\%\{#{Regexp.escape key}\}/, value.to_s
         end
       end
     end
