@@ -5,6 +5,10 @@ module Scide
   # See under Scide::Commands.
   class Command
 
+    # The options given to this command. These are built by merging
+    # global options, project options and window options.
+    attr_reader :options
+
     # Returns a new command for the given window.
     #
     # ==== Arguments
@@ -90,7 +94,7 @@ module Scide
     # contents are a hash. See Scide::Command.resolve.
     def self.resolve_from_hash window, contents
       begin
-        klass = Scide::Commands.const_get contents[:command].downcase.capitalize
+        klass = Scide::Commands.const_get contents[:command].downcase.camelize
         klass.new contents[:contents], window.options.dup
       rescue NameError => err
         raise ArgumentError, "unknown '#{contents[:command]}' command type"
@@ -102,7 +106,7 @@ module Scide
     def self.resolve_from_string window, contents
       klass_name, text = contents.split /\s+/, 2
       begin
-        klass = Scide::Commands.const_get klass_name.downcase.capitalize
+        klass = Scide::Commands.const_get klass_name.downcase.camelize
         klass.new text, window.options.dup
       rescue NameError => err
         raise ArgumentError, "unknown '#{klass_name}' command type"
