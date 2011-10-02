@@ -17,12 +17,8 @@ module Scide
     #   ssh 127.0.0.1
     class Show < Scide::Command
 
-      def initialize contents, options = {}
-        super contents, options
-      end
-
-      # Returns a configuration fragment that will put
-      # this command GNU \Screen window without running it.
+      # Returns a configuration fragment that will show
+      # this command in a GNU \Screen window without running it.
       # This will use screen's <tt>stuff</tt> command to
       # put the text in the window.
       def to_screen

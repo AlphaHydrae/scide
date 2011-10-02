@@ -17,8 +17,9 @@ module Scide
     # * <tt>contents</tt> - The global options hash.
     def initialize contents
       raise ArgumentError, 'global configuration must be a hash' unless contents.kind_of? Hash
+      raise ArgumentError, 'global options must be a hash' unless contents[:options].nil? or contents[:options].kind_of?(Hash)
 
-      @options = contents[:options] || {}
+      @options = contents[:options].try(:dup) || {}
 
       # default to home directory
       @path = contents[:path].try(:to_s) || File.expand_path('~')
