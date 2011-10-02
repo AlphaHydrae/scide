@@ -16,6 +16,12 @@ end
 require 'rspec'
 require 'shoulda'
 
+class SpecHelper
+  def self.result name
+    File.open(File.join(File.dirname(__FILE__), 'results', "#{name}.screen"), 'r').read
+  end
+end
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'scide'

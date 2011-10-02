@@ -70,7 +70,7 @@ module Scide
       String.new.tap do |s|
         @windows.each_with_index do |w,i|
           s << w.to_screen(i)
-          s << "\n" if i != @windows.length - 1
+          s << "\n" if i != (@windows.length - 1)
         end
       end
     end

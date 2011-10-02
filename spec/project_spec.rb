@@ -75,16 +75,17 @@ describe Scide::Project do
       contents = {
         :windows => [
           'window1 EDIT',
-          { :name => 'window2', :command => 'SHOW' },
+          { :name => 'window2', :command => 'SHOW', :contents => 'ssh example.com' },
           'window3 TAIL file.txt',
-          { :string => 'window4 RUN ls -la' }
+          { :string => 'window4 RUN ls -la' },
+          'window5'
         ]
       }
       @project = Scide::Project.new @global, 'fubar', contents
     end
 
-    it "should create four windows" do
-      @project.windows.length.should == 4
+    it "should create five windows" do
+      @project.windows.length.should == 5
       @project.windows.each{ |w| w.should be_a_kind_of(Scide::Window) }
     end
 
@@ -93,6 +94,11 @@ describe Scide::Project do
       @project.windows[1].command.should be_a_kind_of(Scide::Commands::Show)
       @project.windows[2].command.should be_a_kind_of(Scide::Commands::Tail)
       @project.windows[3].command.should be_a_kind_of(Scide::Commands::Run)
+      @project.windows[4].command.should be_nil
+    end
+
+    it "should create a GNU Screen configuration" do
+      @project.to_screen.should == SpecHelper.result(:project1)
     end
   end
 
