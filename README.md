@@ -34,8 +34,8 @@ You can load another file by running scide with the `-c` flag:
 This is a simple scide configuration file:
 
     projects:
-      path: /home/jdoe/projects/chessmaster
       chessmaster:
+        path: /home/jdoe/projects/chessmaster
         windows:
           - 'project EDIT'
           - 'db-log TAIL log/db.log'
