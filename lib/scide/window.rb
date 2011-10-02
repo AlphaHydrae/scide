@@ -3,6 +3,10 @@ module Scide
   # Configuration of a GNU Screen window (name, command).
   class Window
 
+    # The name of the window as it will shown in GNU Screen.
+    # See #initialize.
+    attr_reader :name
+
     # Window-specific options. Can be used by commands. See #initialize.
     attr_reader :options
     

@@ -61,7 +61,6 @@ describe Scide::Command do
     end
 
     it "should resolve camel-case command class names with a string" do
-      puts Scide::Commands::FuBar
       com = Scide::Command.resolve @window, 'FU_BAR'
       com.should be_a_kind_of(Scide::Commands::FuBar)
     end
