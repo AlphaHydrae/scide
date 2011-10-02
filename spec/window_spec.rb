@@ -93,6 +93,10 @@ describe Scide::Window do
     end
   end
 
+  it "should raise an error when type of contents is unknown" do
+    lambda{ Scide::Window.new(@project, []) }.should raise_error(ArgumentError)
+  end
+
   it "should duplicate project options" do
     @project.should_receive :options
     win = Scide::Window.new @project, 'fubar'
