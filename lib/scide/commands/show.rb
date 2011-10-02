@@ -19,7 +19,6 @@ module Scide
 
       def initialize contents, options = {}
         super contents, options
-        raise ArgumentError, 'SHOW command cannot show nothing' unless @text.present?
       end
 
       # Returns a configuration fragment that will put
