@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "scide"
-  s.version = "0.0.5"
+  s.version = "0.0.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2011-10-01"
+  s.date = "2011-10-02"
   s.description = "Utility to generate GNU screen configuration files."
   s.email = "hydrae.alpha@gmail.com"
   s.executables = ["scide"]
@@ -42,6 +42,11 @@ Gem::Specification.new do |s|
     "lib/scide/screen.rb",
     "lib/scide/window.rb",
     "scide.gemspec",
+    "spec/command_spec.rb",
+    "spec/commands/edit_spec.rb",
+    "spec/commands/run_spec.rb",
+    "spec/commands/show_spec.rb",
+    "spec/commands/tail_spec.rb",
     "spec/helper.rb"
   ]
   s.homepage = "http://github.com/AlphaHydrae/scide"
