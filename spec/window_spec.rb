@@ -14,6 +14,11 @@ describe Scide::Window do
       win.name.should == 'fubar'
     end
 
+    it "should create the correct command" do
+      win = Scide::Window.new @project, 'fubar EDIT'
+      win.command.should be_a_kind_of(Scide::Commands::Edit)
+    end
+
     it "should be initializable with a name and a command with no contents" do
       lambda{ Scide::Window.new @project, 'fubar EDIT' }.should_not raise_error(ArgumentError)
     end
@@ -37,6 +42,11 @@ describe Scide::Window do
       win.name.should == 'fubar'
     end
 
+    it "should create the correct command" do
+      win = Scide::Window.new @project, :name => 'fubar', :command => 'EDIT'
+      win.command.should be_a_kind_of(Scide::Commands::Edit)
+    end
+
     it "should be initializable with a name and a command with no contents" do
       lambda{ Scide::Window.new @project, :name => 'fubar', :command => 'EDIT' }.should_not raise_error(ArgumentError)
     end
@@ -58,6 +68,11 @@ describe Scide::Window do
       it "should take the given name" do
         win = Scide::Window.new @project, :string => 'fubar'
         win.name.should == 'fubar'
+      end
+
+      it "should create the correct command" do
+        win = Scide::Window.new @project, :string => 'fubar EDIT'
+        win.command.should be_a_kind_of(Scide::Commands::Edit)
       end
 
       it "should be initializable with a name and a command with no contents" do
@@ -90,5 +105,14 @@ describe Scide::Window do
     @project.should_receive :options
     win = Scide::Window.new @project, :name => 'fubar', :options => window_options
     win.options.should == @options.merge(window_options)
+  end
+
+  it "should generate a GNU Screen window" do
+    # without a command, hash initialization
+    win = Scide::Window.new @project, :name => 'fubar'
+    win.to_screen(0).should == 'screen -t fubar 0'
+    # with a command, string initialization
+    win = Scide::Window.new @project, 'fubar EDIT file.txt'
+    win.to_screen(0).should == %|screen -t fubar 0\n#{win.command.to_screen}|
   end
 end

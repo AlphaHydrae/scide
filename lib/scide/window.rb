@@ -7,6 +7,9 @@ module Scide
     # See #initialize.
     attr_reader :name
 
+    # The optional command that will be shown in this window.
+    attr_reader :command
+
     # Window-specific options. Can be used by commands. See #initialize.
     attr_reader :options
     
