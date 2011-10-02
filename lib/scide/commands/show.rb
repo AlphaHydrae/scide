@@ -17,6 +17,11 @@ module Scide
     #   ssh 127.0.0.1
     class Show < Scide::Command
 
+      def initialize contents, options = {}
+        super contents, options
+        raise ArgumentError, 'SHOW command cannot show nothing' unless @text.present?
+      end
+
       # Returns a configuration fragment that will put
       # this command GNU \Screen window without running it.
       # This will use screen's <tt>stuff</tt> command to
