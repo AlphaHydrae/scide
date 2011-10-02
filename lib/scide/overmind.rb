@@ -1,12 +1,16 @@
 module Scide
 
+  # Utility class to run scide in a script.
   class Overmind
 
+    # Awakens the overmind.
     def initialize
       @cli = Scide::Opts.new
       @config = Scide::Config.new
     end
 
+    # Parses command-line arguments and loads the configuration file.
+    # Any error will be run through Scide.fail.
     def brood
       @cli.parse! ARGV
       @config.file = @cli.funnel[:config] if @cli.funnel.key? :config
@@ -15,9 +19,19 @@ module Scide
       self
     end
 
+    # Runs GNU \Screen with the project given as argument.
+    # The <tt>--dry-run</tt> option will cause scide to print the
+    # resulting configuration instead of running it.
+    #
+    # ==== Errors
+    # * <tt>not_initialized</tt> - If #brood was not called.
+    # * <tt>unknown_project</tt> - If the given project is not found
+    #   in the configuration file.
+    # * <tt>screen_not_found</tt> - If the GNU \Screen binary is not
+    #   found with <tt>which</tt>.
     def dominate
 
-      Scide.fail :not_initialized, 'ERROR: call #brood to initialize' unless @initialized
+      Scide.fail :not_initialized, 'ERROR: call #brood to initialize.' unless @initialized
     
       project_key = ARGV.shift
       unless @config.projects.key? project_key
