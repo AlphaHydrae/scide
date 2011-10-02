@@ -2,6 +2,9 @@ require 'rubygems'
 require 'bundler'
 require 'simplecov'
 
+# to silence streams
+require 'active_support/core_ext/kernel/reporting'
+
 # test coverage
 SimpleCov.start
 

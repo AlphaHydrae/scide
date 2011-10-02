@@ -1,5 +1,4 @@
 require 'helper'
-require 'active_support/core_ext/kernel/reporting'
 
 describe Scide::Opts do
 
