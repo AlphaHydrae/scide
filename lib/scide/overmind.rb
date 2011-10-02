@@ -1,3 +1,5 @@
+require 'tempfile'
+
 module Scide
 
   # Utility class to run scide in a script.
@@ -56,7 +58,12 @@ module Scide
         puts screen.to_s.gsub(/^/, '   ')
         puts
       else
-        screen.run
+        file = Tempfile.new 'scide'
+        file.write screen.to_s
+        file.rewind
+        file.close
+        system screen.to_command(file.path)
+        file.unlink
       end
     end
   end

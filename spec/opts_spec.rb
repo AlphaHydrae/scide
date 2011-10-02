@@ -31,7 +31,7 @@ describe Scide::Opts do
 
   it "should exit with status 2 for unknown arguments" do
     [ '-x', '--fubar', '-4' ].each do |unknown|
-      lambda{ @opts.parse!([unknown]) }.should raise_error(SystemExit){ |err| err.status.should == 2 }
+      lambda{ parse!([unknown]) }.should raise_error(SystemExit){ |err| err.status.should == 2 }
     end
   end
 

@@ -20,6 +20,14 @@ class SpecHelper
   def self.result name
     File.open(File.join(File.dirname(__FILE__), 'results', "#{name}.screen"), 'r').read
   end
+
+  def self.silence
+    silence_stream(STDOUT) do
+      silence_stream(STDERR) do
+        yield
+      end
+    end
+  end
 end
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))

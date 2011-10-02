@@ -15,3 +15,7 @@ group :development do
   gem 'simplecov'
   gem 'rdoc'
 end
+
+group :test do
+  gem 'active_support', '>= 2'
+end

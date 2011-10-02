@@ -1,5 +1,3 @@
-require 'tempfile'
-
 module Scide
 
   # Configuration of a GNU Screen session (windows for a specific project).
@@ -10,6 +8,9 @@ module Scide
     
     # The default screen hardstatus line.
     DEFAULT_HARDSTATUS = '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
+
+    # Options for this screen.
+    attr_accessor :options
 
     # Returns a screen configuration for the given project.
     #
@@ -25,17 +26,7 @@ module Scide
       raise ArgumentError, 'screen configuration must be a hash' unless options.nil? or options.kind_of?(Hash)
 
       @project = project
-      @options = options || {}
-    end
-
-    # Runs screen with this configuration.
-    #
-    # The configuration is saved to a temporary file, then removed.
-    def run
-      file = Tempfile.new 'scide'
-      save file.path
-      system to_command(file.path)
-      file.unlink
+      @options = options.try(:dup) || {}
     end
 
     # Returns the command that will be used to run screen with this configuration.
@@ -44,7 +35,7 @@ module Scide
     # * <tt>tmp_file</tt> - The temporary file in which the configuration will be stored.
     #   (Optional for dry-run.)
     def to_command tmp_file = 'TEMPORARY_FILE'
-      "cd #{@project.path} && #{binary} #{args} -c #{tmp_file}"
+      [ "cd #{@project.path} &&", binary, args, "-c #{tmp_file}" ].select(&:present?).join(' ')
     end
 
     # Verifies that the screen binary is there. If not, causes scide
@@ -64,28 +55,21 @@ module Scide
       end
     end
 
-    private
-
     # Returns the screen hardstatus line given as option, or
     # the default #DEFAULT_HARDSTATUS.
     def hardstatus
-      @options[:hardstatus] || DEFAULT_HARDSTATUS
+      @options[:hardstatus].try(:to_s) || DEFAULT_HARDSTATUS
     end
 
     # Returns the screen binary given as option, or the
     # default (<tt>screen</tt>).
     def binary
-      @options[:binary] || 'screen'
+      @options[:binary].try(:to_s) || 'screen'
     end
 
     # Returns the screen command-line arguments given as options.
     def args
-      @options[:args]
-    end
-
-    # Saves this configuration to the file at the given path.
-    def save file
-      File.open(file, 'w'){ |f| f.write to_s }
+      @options[:args].try(:to_s)
     end
   end
 end
