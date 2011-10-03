@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "scide"
-  s.version = "0.0.6"
+  s.version = "0.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.md",
     "Rakefile",
+    "TODO.md",
     "VERSION",
     "bin/scide",
     "lib/scide.rb",
@@ -47,7 +48,19 @@ Gem::Specification.new do |s|
     "spec/commands/run_spec.rb",
     "spec/commands/show_spec.rb",
     "spec/commands/tail_spec.rb",
-    "spec/helper.rb"
+    "spec/config_spec.rb",
+    "spec/global_spec.rb",
+    "spec/helper.rb",
+    "spec/opts_spec.rb",
+    "spec/project_spec.rb",
+    "spec/results/config1.yml",
+    "spec/results/malformed_config.yml",
+    "spec/results/project1.screen",
+    "spec/results/screen1.screen",
+    "spec/scide_spec.rb",
+    "spec/screen_spec.rb",
+    "spec/version_spec.rb",
+    "spec/window_spec.rb"
   ]
   s.homepage = "http://github.com/AlphaHydrae/scide"
   s.licenses = ["MIT"]
@@ -64,7 +77,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_development_dependency(%q<rcov>, [">= 0"])
+      s.add_development_dependency(%q<simplecov>, [">= 0"])
       s.add_development_dependency(%q<rdoc>, [">= 0"])
     else
       s.add_dependency(%q<upoj-rb>, ["~> 0.0.4"])
@@ -72,7 +85,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_dependency(%q<rcov>, [">= 0"])
+      s.add_dependency(%q<simplecov>, [">= 0"])
       s.add_dependency(%q<rdoc>, [">= 0"])
     end
   else
@@ -81,7 +94,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-    s.add_dependency(%q<rcov>, [">= 0"])
+    s.add_dependency(%q<simplecov>, [">= 0"])
     s.add_dependency(%q<rdoc>, [">= 0"])
   end
 end
