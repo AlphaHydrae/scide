@@ -34,8 +34,8 @@ You can load another file by running scide with the `-c` flag:
 This is a simple scide configuration file:
 
     projects:
-      chessmaster:
-        path: /home/jdoe/projects/chessmaster
+      mywebsite:
+        path: /home/jdoe/projects/mywebsite
         windows:
           - 'project EDIT'
           - 'db-log TAIL log/db.log'
@@ -43,7 +43,7 @@ This is a simple scide configuration file:
           - 'shell'
         default_window: project
 
-By running `scide chessmaster`, screen would open with four windows:
+By running `scide mywebsite`, screen would open with four windows:
 
 * a __project__ window with your favorite `$EDITOR` launched;
 * a __db-log__ window with a tail of the project's database log;
@@ -62,8 +62,8 @@ can be run in the window, which can receive arguments/contents.
 Projects can have a hash of options that commands can use:
 
     projects:
-      chessmaster:
-        path: /home/jdoe/projects/chessmaster
+      mywebsite:
+        path: /home/jdoe/projects/mywebsite
         options:
           log_dir: /var/log
           server: thin
@@ -83,8 +83,8 @@ You can configure a base path and options for all projects.
       options:
         log_dir: /var/log
     projects:
-      chessmaster:
-        path: chessmaster # this is now relative to the global path
+      mywebsite:
+        path: mywebsite # this is now relative to the global path
         options:
           server: thin
         windows:
@@ -113,7 +113,7 @@ Simply runs `$EDITOR`, your preferred editor.
 If the `edit` option is present, it will be used as arguments to the editor.
 
     # project configuration:
-    chessmaster:
+    mywebsite:
       options:
         edit: '-c MyVimCommand'
       windows:
@@ -133,7 +133,7 @@ For example, `TAIL log/db.log` would generate the following command:
 If the `tail` option is present, it will be used as arguments to tail.
 
     # project configuration:
-    chessmaster:
+    mywebsite:
       options:
         tail: '-n 1000'
       windows:

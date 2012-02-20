@@ -41,7 +41,7 @@ module Scide
     # Verifies that the screen binary is there. If not, causes scide
     # to fail with a <tt>screen_not_found</tt> error (see {Scide.fail}).
     def check_binary
-      Scide.fail :screen_not_found, "ERROR: #{binary} not found" unless system("which #{binary}", { [ :out, :err ] => :close })
+      Scide.fail :screen_not_found, "ERROR: #{binary} not found" unless system("which #{binary} &>/dev/null")
     end
 
     # Returns a representation of this configuration as a string.
