@@ -41,6 +41,7 @@ This is a simple scide configuration file:
           - 'db-log TAIL log/db.log'
           - 'server RUN rails server'
           - 'shell'
+        default_window: project
 
 By running `scide chessmaster`, screen would open with four windows:
 
@@ -48,6 +49,9 @@ By running `scide chessmaster`, screen would open with four windows:
 * a __db-log__ window with a tail of the project's database log;
 * a __server__ window with your Ruby on Rails server launched;
 * a __shell__ window with your shell running.
+
+The __project__ window would be opened as specified by the
+`default_window` option.
 
 The format for a window is `NAME [COMMAND] [CONTENTS]`.
 This opens a window with the given name. An optional command
