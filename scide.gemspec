@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "scide"
-  s.version = "0.0.8"
+  s.version = "0.0.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["AlphaHydrae"]
-  s.date = "2011-10-20"
+  s.date = "2012-02-20"
   s.description = "Utility to generate GNU screen configuration files."
   s.email = "hydrae.alpha@gmail.com"
   s.executables = ["scide"]
