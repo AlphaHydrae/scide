@@ -15,6 +15,10 @@ module Scide
     # The GNU Screen windows of this project.
     attr_reader :windows
 
+    # The name or index of the window that should be displayed by default for
+    # this project (defaults to the last window).
+    attr_reader :default_window
+
     # Returns a project configuration.
     #
     # If not given in the project hash, {#path} is built by joining
@@ -60,6 +64,16 @@ module Scide
       @options.merge!(contents[:options] || {})
 
       @windows = contents[:windows].collect{ |w| Scide::Window.new self, w }
+
+      # find default window if specified
+      @default_window = if contents[:default_window].kind_of? Fixnum
+        @windows[contents[:default_window]]
+      elsif contents[:default_window].kind_of?(String) or contents[:default_window].kind_of?(Symbol)
+        @windows.find{ |w| w.name == contents[:default_window].to_s }
+      elsif !contents[:default_window].nil?
+        raise ArgumentError, "default window of project '#{key}' should be an integer, string or symbol"
+      end
+      raise ArgumentError, "default window of project '#{key}' must be the name or index of one of its windows" if !contents[:default_window].nil? and @default_window.nil?
     end
 
     # Returns a representation of this project as a GNU Screen
@@ -72,6 +86,7 @@ module Scide
           s << w.to_screen(i)
           s << "\n" if i != (@windows.length - 1)
         end
+        s << "\nselect #{@default_window.name}" if @default_window
       end
     end
   end

@@ -72,16 +72,17 @@ describe Scide::Project do
 
   describe 'Sample Configuration' do
     before :each do
-      contents = {
+      @contents = {
         :windows => [
           'window1 EDIT',
           { :name => 'window2', :command => 'SHOW', :contents => 'ssh example.com' },
           'window3 TAIL file.txt',
           { :string => 'window4 RUN ls -la' },
           'window5'
-        ]
+        ],
+        :default_window => :window4
       }
-      @project = Scide::Project.new @global, 'fubar', contents
+      @project = Scide::Project.new @global, 'fubar', @contents
     end
 
     it "should create five windows" do
@@ -97,8 +98,56 @@ describe Scide::Project do
       @project.windows[4].command.should be_nil
     end
 
-    it "should create a GNU Screen configuration" do
+    it "should find the correct default window" do
+      @project.default_window.should == @project.windows[3]
+    end
+
+    it "should create the correct GNU Screen configuration" do
       @project.to_screen.should == SpecHelper.result(:project1)
+    end
+
+    describe 'Default Window' do
+      before :each do
+        @default_window_contents = @contents.dup
+      end
+
+      it "should find the default window with a fixnum" do
+        @default_window_contents[:default_window] = 0
+        project = Scide::Project.new(@global, 'fubar', @default_window_contents)
+        project.default_window.should == project.windows[0]
+      end
+
+      it "should find the default window with a negative fixnum" do
+        @default_window_contents[:default_window] = -4
+        project = Scide::Project.new(@global, 'fubar', @default_window_contents)
+        project.default_window.should == project.windows[1]
+      end
+
+      it "should find the default window with a string" do
+        @default_window_contents[:default_window] = 'window3'
+        project = Scide::Project.new(@global, 'fubar', @default_window_contents)
+        project.default_window.should == project.windows[2]
+      end
+
+      it "should find the default window with a symbol" do
+        @default_window_contents[:default_window] = :window5
+        project = Scide::Project.new(@global, 'fubar', @default_window_contents)
+        project.default_window.should == project.windows[4]
+      end
+
+      it "should raise an error if the default window is not a fixnum, string or symbol" do
+        [ [], {}, 0.4 ].each do |invalid|
+          @default_window_contents[:default_window] = invalid
+          lambda{ Scide::Project.new @global, 'fubar', @default_window_contents }.should raise_error(ArgumentError)
+        end
+      end
+
+      it "should raise an error if the default window is unknown" do
+        [ 'unknown', :unknown, -10, -6, 5, 10 ].each do |invalid|
+          @default_window_contents[:default_window] = invalid
+          lambda{ Scide::Project.new @global, 'fubar', @default_window_contents }.should raise_error(ArgumentError)
+        end
+      end
     end
   end
 
