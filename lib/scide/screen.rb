@@ -1,3 +1,5 @@
+require 'which_works'
+
 module Scide
 
   # Configuration of a GNU Screen session (windows for a specific project).
@@ -41,7 +43,7 @@ module Scide
     # Verifies that the screen binary is there. If not, causes scide
     # to fail with a <tt>screen_not_found</tt> error (see {Scide.fail}).
     def check_binary
-      Scide.fail :screen_not_found, "ERROR: #{binary} not found" unless system("which #{binary} &>/dev/null")
+      Scide.fail :screen_not_found, "ERROR: #{binary} not found" unless Which.which(binary)
     end
 
     # Returns a representation of this configuration as a string.
