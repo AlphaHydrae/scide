@@ -54,7 +54,7 @@ module Scide
 
       begin
         @config = parse_config raw_config
-      rescue SyntaxError => err
+      rescue SyntaxError, ArgumentError => err
         Scide.fail :malformed_config, "ERROR: could not parse configuration #{@file}\n   #{err}"
       end
 
