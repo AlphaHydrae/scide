@@ -69,24 +69,28 @@ describe Scide::Config do
 
       it SpecHelper.should_fail(exit_on_fail, :invalid_config, "if the configuration is not a hash") do
         conf = Scide::Config.new
+        conf.stub!(:check_config){}
         conf.stub!(:load_config){ "- 'a'\n- 'b'" }
         load_should_fail(conf, :invalid_config)
       end
 
       it SpecHelper.should_fail(exit_on_fail, :invalid_config, "if the screen configuration is not a hash") do
         conf = Scide::Config.new
+        conf.stub!(:check_config){}
         conf.stub!(:load_config){ "screen:\n- 'a'\n- 'b'" }
         load_should_fail(conf, :invalid_config)
       end
 
       it SpecHelper.should_fail(exit_on_fail, :invalid_config, "if the projects configuration is not a hash") do
         conf = Scide::Config.new
+        conf.stub!(:check_config){}
         conf.stub!(:load_config){ "projects:\n- 'a'\n- 'b'" }
         load_should_fail(conf, :invalid_config)
       end
 
       it SpecHelper.should_fail(exit_on_fail, :invalid_config, "if the configuration is otherwise invalid") do
         conf = Scide::Config.new
+        conf.stub!(:check_config){}
         conf.stub!(:load_config){ "global:\n  a: true\nprojects:\n  a:\n    - 'a'\n    - 'b'" }
         load_should_fail(conf, :invalid_config)
       end

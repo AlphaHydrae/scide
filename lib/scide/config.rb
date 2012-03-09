@@ -42,9 +42,7 @@ module Scide
     # * <tt>invalid_config</tt> - {#file} contains invalid configuration (see README).
     # * <tt>unexpected</tt> - {#file} could not be read.
     def load!
-  
-      Scide.fail :config_not_found, "ERROR: expected to find configuration at #{@file}" unless File.exists? @file
-      Scide.fail :config_not_readable, "ERROR: configuration #{@file} is not readable" unless File.readable? @file
+      check_config
 
       begin
         raw_config = load_config
@@ -78,6 +76,14 @@ module Scide
     end
 
     private
+
+    # Causes scide to fail with a <tt>config_not_found</tt> error if the configuration
+    # file does not exist, or with a <tt>config_not_readable</tt> error if it is not
+    # readable (see {Scide.fail}).
+    def check_config
+      Scide.fail :config_not_found, "ERROR: expected to find configuration at #{@file}" unless File.exists? @file
+      Scide.fail :config_not_readable, "ERROR: configuration #{@file} is not readable" unless File.readable? @file
+    end
 
     # Returns the contents of {#file}.
     def load_config
