@@ -37,6 +37,7 @@ GEM
     upoj-rb (0.0.5)
       active_support (>= 2)
       paint
+    which_works (0.1.0)
     yard (0.7.5)
 
 PLATFORMS
@@ -52,4 +53,5 @@ DEPENDENCIES
   simplecov
   travis-lint (~> 1.3.0)
   upoj-rb (~> 0.0.4)
+  which_works (~> 0.1.0)
   yard
