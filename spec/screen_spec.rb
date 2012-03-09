@@ -70,8 +70,15 @@ describe Scide::Screen do
     screen.options.should_not equal(options)
   end
 
+  it "should not raise any error if the screen binary is found" do
+    screen = '/usr/bin/screen'
+    Which.stub!(:which){ |name| screen } unless File.executable?(screen)
+    lambda{ SpecHelper.silence{ Scide::Screen.new(@project, :binary => screen).check_binary } }.should_not raise_error
+  end
+
   it "should exit with status 4 if the screen binary is not found" do
-    bad_binary = "IHateYouIfYouAddedThisBinaryJustToMakeMyTestFail"
+    bad_binary = "unknown"
+    Which.stub!(:which){ |name| nil }
     lambda{ SpecHelper.silence{ Scide::Screen.new(@project, :binary => bad_binary).check_binary } }.should raise_error(SystemExit){ |err| err.status.should == 4 }
   end
 
