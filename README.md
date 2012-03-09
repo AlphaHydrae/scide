@@ -5,6 +5,11 @@ GNU Screen IDE.
 The purpose of this tool is to generate several GNU screen configurations from a single YAML configuration file.
 This can be used to easily setup a multi-windows development environment with screen.
 
+Tested with <a href="https://www.relishapp.com/rspec">RSpec</a>, <a href="https://github.com/thoughtbot/shoulda">shoulda</a> and <a href="http://travis-ci.org/#!/AlphaHydrae/scide">Travis CI</a>.
+
+* master [![Build Status](https://secure.travis-ci.org/AlphaHydrae/scide.png?branch=master)](http://travis-ci.org/AlphaHydrae/scide)
+* develop [![Build Status](https://secure.travis-ci.org/AlphaHydrae/scide.png?branch=develop)](http://travis-ci.org/AlphaHydrae/scide)
+
 ## Using
 
 You can install scide with:
