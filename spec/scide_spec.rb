@@ -31,7 +31,7 @@ describe Scide do
 
   it "should raise an error with the correct condition" do
     Scide.exit_on_fail = false
-    Scide::EXIT.each_pair do |condition|
+    Scide::EXIT.each_pair do |condition,code|
       lambda{ Scide.fail condition, 'fubar' }.should raise_error(Scide::Error){ |err| err.condition.should == condition }
     end
   end
