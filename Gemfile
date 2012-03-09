@@ -10,11 +10,12 @@ gem 'upoj-rb', '~> 0.0.4'
 group :development do
   gem 'rspec'
   gem 'shoulda'
-  gem 'bundler', '~> 1.0.0'
+  gem 'bundler'
   gem 'jeweler', '~> 1.6.4'
   gem 'simplecov'
   gem 'yard'
   gem 'rdiscount'
+  gem 'travis-lint', '~> 1.3.0'
 end
 
 group :test do
