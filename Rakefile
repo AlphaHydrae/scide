@@ -17,13 +17,29 @@ Jeweler::Tasks.new do |gem|
   gem.name = "scide"
   gem.homepage = "http://github.com/AlphaHydrae/scide"
   gem.license = "MIT"
-  gem.summary = %Q{GNU Screen IDE.}
-  gem.description = %Q{Utility to generate GNU screen configuration files.}
+  gem.summary = %Q{GNU Screen IDE}
+  gem.description = %Q{GNU screen wrapper to open projects with configured windows.}
   gem.email = "hydrae.alpha@gmail.com"
-  gem.authors = ["AlphaHydrae"]
+  gem.authors = ["Simon Oulevay (AlphaHydrae)"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
+
+Rake::TaskManager.class_eval do
+  def remove_task(task_name)
+    @tasks.delete(task_name.to_s)
+  end
+end
+
+[ 'version', 'version:bump:major', 'version:bump:minor', 'version:bump:patch', 'version:write' ].each do |task|
+  Rake.application.remove_task task
+end
+
+# version tasks
+require 'rake-version'
+RakeVersion::Tasks.new do |v|
+  v.copy 'lib/scide.rb'
+end
 
 require 'rspec/core/rake_task'
 desc "Run specs"
@@ -33,26 +49,3 @@ RSpec::Core::RakeTask.new do |t|
 end
 
 task :default => :spec
-
-desc "Generate documentation"
-task :doc => ['doc:generate']
-namespace :doc do
-  project_root = File.dirname __FILE__
-  doc_destination = File.join project_root, 'doc'
-
-  begin
-    require 'yard'
-    require 'yard/rake/yardoc_task'
-
-    YARD::Rake::YardocTask.new(:generate) do |yt|
-      yt.files   = Dir.glob(File.join(project_root, 'lib', '**', '*.rb')) + 
-                   [ File.join(project_root, 'README.md') ]
-      yt.options = ['--output-dir', doc_destination, '--readme', 'README.md', '--private', '--protected']
-    end
-  rescue LoadError
-    desc "Generate YARD Documentation"
-    task :generate do
-      abort "Please install the YARD gem to generate rdoc."
-    end
-  end
-end

@@ -3,22 +3,21 @@ source "http://rubygems.org"
 # Example:
 #   gem "activesupport", ">= 2.3.5"
 
-gem 'upoj-rb', '~> 0.0.4'
+gem 'commander', '~> 4.1.3'
+gem 'paint', '~> 0.8.6'
 gem 'which_works', '~> 0.1.0'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do
-  gem 'rspec'
-  gem 'shoulda'
   gem 'bundler'
-  gem 'jeweler', '~> 1.6.4'
+  gem 'rake'
+  gem 'rspec'
+  gem 'fakefs', require: 'fakefs/safe', git: 'git@github.com:AlphaHydrae/fakefs.git', branch: 'executable-bug'
+  gem 'jeweler'
+  gem 'gemcutter'
+  gem 'gem-release'
+  gem 'rake-version'
   gem 'simplecov'
-  gem 'yard'
-  gem 'rdiscount'
-  gem 'travis-lint', '~> 1.3.0'
-end
-
-group :test do
-  gem 'active_support', '>= 2'
+  gem 'travis-lint'
 end

@@ -1,171 +1,43 @@
-# scide
+# scide [![Build Status](https://secure.travis-ci.org/AlphaHydrae/scide.png?branch=develop)](http://travis-ci.org/AlphaHydrae/scide)
 
-GNU Screen IDE.
+**[GNU Screen](http://www.gnu.org/software/screen/) IDE.**
 
-The purpose of this tool is to generate several GNU screen configurations from a single YAML configuration file.
-This can be used to easily setup a multi-windows development environment with screen.
+The `scide` command wraps `screen` to automatically use `.screenrc` files in the current directory or in project directories.
 
-Tested with <a href="https://www.relishapp.com/rspec">RSpec</a>, <a href="https://github.com/thoughtbot/shoulda">shoulda</a> and <a href="http://travis-ci.org/#!/AlphaHydrae/scide">Travis CI</a>.
-
-* master [![Build Status](https://secure.travis-ci.org/AlphaHydrae/scide.png?branch=master)](http://travis-ci.org/AlphaHydrae/scide)
-* develop [![Build Status](https://secure.travis-ci.org/AlphaHydrae/scide.png?branch=develop)](http://travis-ci.org/AlphaHydrae/scide)
-
-## Using
-
-You can install scide with:
+## Installation
 
     gem install scide
 
-Then use it on the command line:
+## Usage
 
-    scide --version
-    scide my_project
+Assuming your project screen configuration is in `~/src/my-project/.screenrc`.
 
-__Interactive configuration will be introduced in v0.2.*.__
-__Until then, the configuration file must be prepared manually before using scide.__
+    cd ~/src/my-project
+    scide
 
-## Configuration File
+With the **-p, --projects PROJECTS_DIR** option, `scide` will know your project directory so you can open from elsewhere.
 
-The configuration file is expected to be at the following location by default:
+    cd /elsewhere
+    scide -p ~/src my-project
 
-    $HOME/.scide/config.yml
+You can also set the `$SCIDE_PROJECTS` environment variable:
 
-You can load another file by running scide with the `-c` flag:
+    export SCIDE_PROJECTS=~/src
+    scide my-project
 
-    scide -c my_config.yml
+## Screen options
 
-### Basics
+* **-b BIN, --bin BIN**
 
-This is a simple scide configuration file:
+  Use the bin option to give the path to your screen binary if it's not in the PATH or has a different name.
+  This can also be set with the `$SCIDE_BIN` environment variable.
 
-    projects:
-      mywebsite:
-        path: /home/jdoe/projects/mywebsite
-        windows:
-          - 'project EDIT'
-          - 'db-log TAIL log/db.log'
-          - 'server RUN rails server'
-          - 'shell'
-        default_window: project
+* **-s OPTIONS, --screen OPTIONS**
 
-By running `scide mywebsite`, screen would open with four windows:
+  Customize screen options (`-U` by default).
+  This can also be set with the `$SCIDE_SCREEN` environment variable.
 
-* a __project__ window with your favorite `$EDITOR` launched;
-* a __db-log__ window with a tail of the project's database log;
-* a __server__ window with your Ruby on Rails server launched;
-* a __shell__ window with your shell running.
+## Meta
 
-The __project__ window would be opened as specified by the
-`default_window` option.
-
-The format for a window is `NAME [COMMAND] [CONTENTS]`.
-This opens a window with the given name. An optional command
-can be run in the window, which can receive arguments/contents.
-
-### Options
-
-Projects can have a hash of options that commands can use:
-
-    projects:
-      mywebsite:
-        path: /home/jdoe/projects/mywebsite
-        options:
-          log_dir: /var/log
-          server: thin
-        windows:
-          - 'project EDIT'
-          - 'db-log TAIL %{log_dir}/db.log'
-          - 'app-log TAIL %{log_dir}/development.log'
-          - 'server RUN %{server} start'
-          - 'shell'
-
-### Globals
-
-You can configure a base path and options for all projects.
-
-    global:
-      path: /home/jdoe/projects
-      options:
-        log_dir: /var/log
-    projects:
-      mywebsite:
-        path: mywebsite # this is now relative to the global path
-        options:
-          server: thin
-        windows:
-          - 'project EDIT'
-          - 'db-log TAIL %{log_dir}/db.log'
-          - 'app-log TAIL %{log_dir}/development.log'
-          - 'server RUN %{server} start'
-          - 'shell'
-
-Options at the project level override global options if they have the same name.
-
-### Commands
-
-Scide currently provides four commands.
-
-#### RUN
-
-Runs the given contents in the window.
-
-For example, `RUN rails server` launches a Ruby on Rails server in the project folder.
-
-#### EDIT
-
-Simply runs `$EDITOR`, your preferred editor.
-
-If the `edit` option is present, it will be used as arguments to the editor.
-
-    # project configuration:
-    mywebsite:
-      options:
-        edit: '-c MyVimCommand'
-      windows:
-        - 'project EDIT app/controllers/application_controller.erb'
-
-    # resulting command in "project" window:
-    $EDITOR -c MyVimCommand app/controllers/application_controller.erb
-
-#### TAIL
-
-Runs the `tail` command with the given file as the `-f` argument.
-
-For example, `TAIL log/db.log` would generate the following command:
-
-    tail -f log/db.log
-
-If the `tail` option is present, it will be used as arguments to tail.
-
-    # project configuration:
-    mywebsite:
-      options:
-        tail: '-n 1000'
-      windows:
-        - 'db.log TAIL log/db.log'
-
-    # resulting command in "project" window:
-    tail -n 1000 -f log/db.log
-
-#### SHOW
-
-Shows the given contents in the window, without running them.
-
-For example, `SHOW ssh example.com` would pre-type this ssh command in the window, but not run it.
-That way, you can have special commands ready to run in a separate window.
-
-## Contributing to scide
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
-
-## Copyright
-
-Copyright (c) 2011 AlphaHydrae. See LICENSE.txt for
-further details.
-
+* **Author:** Simon Oulevay (Alpha Hydrae)
+* **License:** MIT (see [LICENSE.txt](https://raw.github.com/AlphaHydrae/scide/master/LICENSE.txt))
