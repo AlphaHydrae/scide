@@ -43,7 +43,7 @@ GEM
     simplecov-html (0.7.1)
     travis-lint (1.7.0)
       hashr (~> 0.0.22)
-    which_works (0.1.0)
+    which_works (1.0.0)
 
 PLATFORMS
   ruby
@@ -61,4 +61,4 @@ DEPENDENCIES
   rspec
   simplecov
   travis-lint
-  which_works (~> 0.1.0)
+  which_works (~> 1.0.0)
