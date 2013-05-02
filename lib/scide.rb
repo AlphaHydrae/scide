@@ -3,7 +3,7 @@ require 'which_works'
 require 'shellwords'
 
 module Scide
-  VERSION = '0.0.12'
+  VERSION = '0.1.0'
 
   # TODO: add detailed error description for non-trace mode
   class Error < StandardError
@@ -36,3 +36,4 @@ module Scide
 end
 
 Dir[File.join File.dirname(__FILE__), File.basename(__FILE__, '.*'), '*.rb'].each{ |lib| require lib }
+

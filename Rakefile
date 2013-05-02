@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/AlphaHydrae/scide"
   gem.license = "MIT"
   gem.summary = %Q{GNU Screen IDE}
-  gem.description = %Q{GNU screen wrapper to open projects with configured windows.}
+  gem.description = %Q{GNU screen wrapper to open projects with a .screenrc file.}
   gem.email = "hydrae.alpha@gmail.com"
   gem.authors = ["Simon Oulevay (AlphaHydrae)"]
   # dependencies defined in Gemfile
