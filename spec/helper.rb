@@ -14,8 +14,17 @@ require 'rspec'
 require 'fakefs/spec_helpers'
 
 RSpec.configure do |config|
+
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.before :suite do
+    ENV.delete_if{ |k,v| k.match /\ASCIDE_/ }
+  end
+
+  config.after :each do
+    ENV.delete_if{ |k,v| k.match /\ASCIDE_/ }
   end
 end
 

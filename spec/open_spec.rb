@@ -10,20 +10,23 @@ describe 'Scide.open' do
   let(:system_result){ true }
   let(:name){ nil }
   let(:options){ {} }
-  let(:args){ (name ? [ name ] : []) + (options.empty? ? [] : [ options ]) }
+  let(:open_args){ (name ? [ name ] : []) + (options.empty? ? [] : [ options ]) }
+  let(:expected_screenrc){ Regexp.escape '.screenrc' }
 
   before :each do
 
+    # for temporary files
+    FileUtils.mkdir_p '/tmp'
+
+    # for which
     FileUtils.mkdir_p '/usr/bin'
     FileUtils.touch '/usr/bin/screen'
     FileUtils.chmod 0755, '/usr/bin/screen'
+
+    # home folder
     FileUtils.mkdir_p File.expand_path('~')
 
-    if env_projects_dir
-      ENV['SCIDE_PROJECTS'] = env_projects_dir
-    else
-      ENV.delete 'SCIDE_PROJECTS'
-    end
+    ENV['SCIDE_PROJECTS'] = env_projects_dir if env_projects_dir
 
     Kernel.stub system: system_result
   end
@@ -45,26 +48,46 @@ describe 'Scide.open' do
   shared_examples_for "a screen wrapper" do
 
     it "should execute the command" do
-      expect_success "#{expected_chdir}screen -U -c .screenrc"
+      expect_success /\A#{expected_chdir}screen -U -c #{expected_screenrc}\Z/
     end
 
-    context "with a custom binary" do
+    context "with a custom binary set by option" do
 
       let(:custom_bin){ '/bin/custom-screen' }
       let(:options){ super().merge bin: custom_bin }
 
       it "should execute the command with that binary" do
-        expect_success "#{expected_chdir}#{custom_bin} -U -c .screenrc"
+        expect_success /\A#{expected_chdir}#{Regexp.escape custom_bin} -U -c #{expected_screenrc}\Z/
       end
     end
 
-    context "with custom options" do
+    context "with a custom binary set by environment variable" do
 
-      let(:custom_screen){ '-a' }
+      let(:custom_bin){ '/bin/custom-screen' }
+      before(:each){ ENV['SCIDE_BIN'] = custom_bin }
+
+      it "should execute the command with that binary" do
+        expect_success /\A#{expected_chdir}#{Regexp.escape custom_bin} -U -c #{expected_screenrc}\Z/
+      end
+    end
+
+    context "with custom screen options set by option" do
+
+      let(:custom_screen){ '-r -x' }
       let(:options){ super().merge screen: custom_screen }
 
       it "should execute the command with those options" do
-        expect_success "#{expected_chdir}screen -a -c .screenrc"
+        expect_success /\A#{expected_chdir}screen -r -x -c #{expected_screenrc}\Z/
+      end
+    end
+
+    context "with custom screen options set by environment variable" do
+
+      let(:custom_screen){ '-r -x' }
+      before(:each){ ENV['SCIDE_SCREEN'] = custom_screen }
+
+      it "should execute the command with those options" do
+        expect_success /\A#{expected_chdir}screen -r -x -c #{expected_screenrc}\Z/
       end
     end
 
@@ -73,7 +96,7 @@ describe 'Scide.open' do
       let(:options){ super().merge noop: true }
 
       it "should print the command" do
-        expect_success false, "#{expected_chdir}screen -U -c .screenrc"
+        expect_success false, /\A#{expected_chdir}screen -U -c #{expected_screenrc}\Z/
       end
     end
   end
@@ -82,11 +105,7 @@ describe 'Scide.open' do
 
     let(:file){ '/projects/a/.screenrc' }
     let(:dir){ File.dirname file }
-
-    before :each do
-      FileUtils.mkdir_p dir
-      Dir.chdir dir
-    end
+    before(:each){ Dir.chdir setup(dir, false) }
 
     it "should fail if there is no configuration file" do
       expect_failure /no such configuration/i
@@ -95,6 +114,13 @@ describe 'Scide.open' do
     it "should fail if the configuration is not a file" do
       FileUtils.mkdir_p file
       expect_failure /not a file/i
+    end
+
+    context "with the auto option" do
+      let(:expected_chdir){ nil }
+      let(:expected_screenrc){ '.+' }
+      let(:options){ super().merge auto: true }
+      it_behaves_like "a screen wrapper"
     end
 
     context "if the project is valid" do
@@ -113,11 +139,11 @@ describe 'Scide.open' do
     it "should fail if the project directory is not a directory" do
       FileUtils.mkdir_p File.dirname(dir)
       FileUtils.touch dir
-      expect_failure /not a directory/i
+      expect_failure /no such directory/i
     end
 
     it "should fail if there is no configuration file" do
-      FileUtils.mkdir_p dir
+      setup dir, false
       expect_failure /no such configuration/i
     end
 
@@ -126,15 +152,17 @@ describe 'Scide.open' do
       expect_failure /not a file/i
     end
 
+    context "with the auto option" do
+      let(:expected_chdir){ Regexp.escape "cd #{Shellwords.escape dir} && " }
+      let(:expected_screenrc){ '.+' }
+      let(:options){ super().merge auto: true }
+      before(:each){ setup dir, false }
+      it_behaves_like "a screen wrapper"
+    end
+
     context "if the project is valid" do
-
-      let(:expected_chdir){ "cd #{Shellwords.escape dir} && " }
-
-      before :each do
-        FileUtils.mkdir_p dir
-        FileUtils.touch file
-      end
-
+      let(:expected_chdir){ Regexp.escape "cd #{Shellwords.escape dir} && " }
+      before(:each){ setup dir }
       it_behaves_like "a screen wrapper"
     end
   end
@@ -163,7 +191,14 @@ describe 'Scide.open' do
   end
 
   def open
-    Scide.open *args
+    Scide.open *open_args
+  end
+
+  def setup dir, config = true
+    dir = File.expand_path dir
+    FileUtils.mkdir_p dir
+    FileUtils.touch File.join(dir, '.screenrc') if config
+    dir
   end
 
   def expect_success command, expected_result = nil, &block
@@ -180,9 +215,9 @@ describe 'Scide.open' do
     expect{ result = block.call }.to_not raise_error
 
     if !expected_result
-      expect(result).to be_true if args.empty?
+      expect(result).to be_true if open_args.empty?
     elsif !command
-      expect(result).to eq(expected_result)
+      expect(result).to match(expected_result)
     end
   end
 

@@ -9,14 +9,8 @@ describe 'Scide.list' do
   let(:options){ {} }
 
   before :each do
-
     FileUtils.mkdir_p File.expand_path('~')
-
-    if env_projects_dir
-      ENV['SCIDE_PROJECTS'] = env_projects_dir
-    else
-      ENV.delete 'SCIDE_PROJECTS'
-    end
+    ENV['SCIDE_PROJECTS'] = env_projects_dir if env_projects_dir
   end
 
   shared_examples_for "listings" do
@@ -110,6 +104,7 @@ describe 'Scide.list' do
 
   def expect_failure *args, &block
     block = lambda{ list } unless block
+    expect(&block).to raise_error(Scide::Error){ |e| args.each{ |msg| expect(e.message).to match(msg) } }
   end
 
   def list

@@ -1,32 +1,32 @@
 require 'helper'
 
-describe 'scide list' do
+describe 'scide setup' do
 
-  let(:argv){ [ 'list' ] }
+  let(:argv){ [ 'setup' ] }
+  let(:expected_args){ [] }
   let(:expected_options){ {} }
+  let(:expected_output){ '' }
 
   before :each do
-    Scide.stub :list
+    Scide.stub :setup
+    Scide.stub(:list).and_raise(StandardError.new('list should not be called'))
     Scide.stub(:open).and_raise(StandardError.new('open should not be called'))
-    Scide.stub(:setup).and_raise(StandardError.new('setup should not be called'))
   end
 
-  shared_examples_for "list" do
+  shared_examples_for "setup" do
 
-    it "should output nothing if there are no projects" do
-      Scide.stub list: []
-      expect_success "\n"
-    end
+    let(:config_file){ '~/some/.screenrc' }
+    let(:expected_output){ config_file }
 
-    it "should output the list of projects" do
-      Scide.stub list: [ '.', 'a', 'b', 'c' ]
-      expect_success ".\na\nb\nc\n"
+    it "should output the path to the created file" do
+      Scide.stub setup: '~/some/.screenrc'
+      expect_success
     end
 
     context "if it fails" do
      
       before :each do
-        Scide.stub(:list).and_raise(Scide::Error.new('fubar'))
+        Scide.stub(:setup).and_raise(Scide::Error.new('fubar'))
       end
 
       it "should output the error to stderr" do
@@ -44,25 +44,26 @@ describe 'scide list' do
     end
   end
 
-  it_behaves_like "list"
+  it_behaves_like "setup"
 
   [ '-p', '--projects' ].each do |opt|
     context "with the #{opt} option" do
       let(:projects_dir){ '~/Projects' }
       let(:expected_options){ { projects: projects_dir } }
       let(:argv){ super() + [ opt, projects_dir ] }
-      it_behaves_like "list"
+      it_behaves_like "setup"
     end
   end
 
-  def expect_success output
-    Scide.should_receive(:list).with expected_options
+  def expect_success output = nil
+    args = expected_args + (expected_options.empty? ? [] : [ expected_options ])
+    Scide.should_receive(:setup).with *args
     program = Scide::Program.new argv
     stdout, stderr = StringIO.new, StringIO.new
     $stdout, $stderr = stdout, stderr
     expect{ program.run! }.to_not raise_error
     $stdout, $stderr = STDOUT, STDERR
-    expect(stdout.string).to eq(output)
+    expect(Paint.unpaint(stdout.string.chomp "\n")).to eq(output || expected_output)
     expect(stderr.string).to be_empty
   end
 

@@ -1,8 +1,6 @@
 require 'helper'
 
 describe 'Version' do
-
-  it "should be correct" do
-    expect(Scide::VERSION).to eq(File.read(File.join(File.dirname(__FILE__), '..', 'VERSION')))
-  end
+  subject{ Scide::VERSION }
+  it{ should eq(File.read(File.join(File.dirname(__FILE__), '..', 'VERSION'))) }
 end

@@ -5,12 +5,20 @@ describe 'scide open' do
   let(:argv){ [] }
   let(:expected_args){ [] }
   let(:expected_options){ {} }
+  let(:expected_output){ expected_options[:noop] ? fake_command : '' }
+  let(:fake_command){ 'foo' }
 
   before :each do
     Scide.stub :open
+    Scide.stub(:list).and_raise(StandardError.new('list should not be called'))
+    Scide.stub(:setup).and_raise(StandardError.new('setup should not be called'))
   end
 
   shared_examples_for "open" do
+
+    before :each do
+      Scide.stub open: fake_command
+    end
 
     it "should open the current directory" do
       expect_success
@@ -57,6 +65,14 @@ describe 'scide open' do
     end
   end
 
+  [ '-a', '--auto' ].each do |opt|
+    context "with the #{opt} option" do
+      let(:expected_options){ { auto: true } }
+      let(:argv){ [ opt ] }
+      it_behaves_like "open"
+    end
+  end
+
   [ '-n', '--noop' ].each do |opt|
     context "with the #{opt} option" do
       let(:expected_options){ { noop: true } }
@@ -83,8 +99,8 @@ describe 'scide open' do
 
   context "with all options" do
     let(:projects_dir){ '~/Projects' }
-    let(:expected_options){ { projects: projects_dir, noop: true, bin: '/bin/custom-screen', screen: '-a' } }
-    let(:argv){ [ '--noop', '--bin', '/bin/custom-screen', '--screen', '-a', '--projects', projects_dir ] }
+    let(:expected_options){ { projects: projects_dir, auto: true, bin: '/bin/custom-screen', screen: '-r -x', noop: true } }
+    let(:argv){ [ '--projects', projects_dir, '--auto', '--bin', '/bin/custom-screen', '--screen', '-r -x', '--noop' ] }
     it_behaves_like "open"
   end
 
@@ -92,7 +108,12 @@ describe 'scide open' do
     args = args.empty? ? expected_args + (expected_options.empty? ? [] : [ expected_options ]) : args
     Scide.should_receive(:open).with *args
     program = Scide::Program.new argv
+    stdout, stderr = StringIO.new, StringIO.new
+    $stdout, $stderr = stdout, stderr
     expect{ program.run! }.to_not raise_error
+    $stdout, $stderr = STDOUT, STDERR
+    expect(Paint.unpaint(stdout.string.chomp "\n")).to eq(expected_output)
+    expect(stderr.string).to be_empty
   end
 
   def expect_failure message, expect_raise = false, code = 1, &block

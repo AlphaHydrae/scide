@@ -8,18 +8,26 @@ module Scide
     error "screen must be in the path" unless Which.which 'screen'
 
     options = args.last.kind_of?(Hash) ? args.pop : {}
-    project_name = args.shift
-    error "Only one project name must be given, got #{args.unshift project_name}" if args.any?
-    
-    dir = project_name ? File.join(projects_dir(options), project_name) : Dir.pwd
-    error %/Cannot open the home directory/ if File.expand_path(dir) == File.expand_path('~')
-    error %/No such directory "#{dir}"/ unless File.exists? dir
-    error %/"#{dir}" is not a directory/ unless File.directory? dir
+    dir = current_project_dir args, options
 
     file = File.join dir, '.screenrc'
-    error %/No such configuration "#{file}"/ unless File.exists? file
+    exists = File.exists? file
+
+    if auto?(options) and !exists
+      auto_config_file do |auto_file|
+        return run dir, options.merge(screenrc: auto_file.path)
+      end
+    end
+
+    error %/No such configuration "#{file}"/ unless exists
     error %/"#{file}" is not a file/ unless File.file? file
 
+    run dir, options
+  end
+
+  private
+
+  def self.run dir, options = {}
     if options[:noop]
       command dir, options
     else
@@ -28,13 +36,15 @@ module Scide
     end
   end
 
-  private
-
   def self.command dir, options = {}
     # TODO: look for other config file names (e.g. "screenrc") or add option to customize?
-    command = "#{screen_bin(options)} #{screen_options(options)} -c .screenrc"
+    command = "#{screen_bin(options)} #{screen_options(options)} -c #{screen_config(options)}"
     command = "cd #{Shellwords.escape dir} && #{command}" if dir != Dir.pwd
     command
+  end
+
+  def self.screen_config options = {}
+    options[:screenrc] || '.screenrc'
   end
 
   def self.screen_bin options = {}
