@@ -3,7 +3,7 @@ require 'which_works'
 require 'shellwords'
 
 module Scide
-  VERSION = '0.1.1'
+  VERSION = '1.0.0'
 
   # TODO: add detailed error description for non-trace mode
   class Error < StandardError
