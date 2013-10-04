@@ -19,4 +19,5 @@ group :development do
   gem 'rake-version'
   gem 'simplecov'
   gem 'travis-lint'
+  gem 'coveralls', require: false
 end
