@@ -18,24 +18,14 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/AlphaHydrae/scide"
   gem.license = "MIT"
   gem.summary = %Q{GNU Screen IDE}
-  gem.description = %Q{GNU screen wrapper to open projects with a .screenrc file.}
+  gem.description = %Q{GNU screen wrapper to open terminal tabs for projects with a .screenrc file.}
   gem.email = "hydrae.alpha@gmail.com"
   gem.authors = ["Simon Oulevay (AlphaHydrae)"]
+  gem.files = %x[git ls-files -- bin lib].split("\n") + %w(Gemfile LICENSE.txt README.md VERSION)
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-Rake::TaskManager.class_eval do
-  def remove_task(task_name)
-    @tasks.delete(task_name.to_s)
-  end
-end
-
-[ 'version', 'version:bump:major', 'version:bump:minor', 'version:bump:patch', 'version:write' ].each do |task|
-  Rake.application.remove_task task
-end
-
-# version tasks
 require 'rake-version'
 RakeVersion::Tasks.new do |v|
   v.copy 'lib/scide.rb'
