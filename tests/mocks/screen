@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e
+
+fail() {
+  >&2 echo "$@"
+  exit 2
+}
+
+test -w "$SCREEN_MOCK_DATA_FILE" || fail "\$SCREEN_MOCK_DATA_FILE must be set"
+
+echo "$(basename "$0") $@" >> "$SCREEN_MOCK_DATA_FILE"

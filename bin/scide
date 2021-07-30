@@ -25,13 +25,13 @@ is_interactive() {
   test "${-#*i}" != "$-" || test -t 0 || test -n "$PS1"
 }
 
-local_cleanup() {
+cleanup() {
   local tmp_dir="$1"
   test -n "$tmp_dir" && test -d "$tmp_dir" && rm -fr "$tmp_dir"
 }
 
 tmp_dir=`mktemp -d -t scide.XXX`
-trap "local_cleanup $tmp_dir" EXIT
+trap "cleanup $tmp_dir" EXIT
 
 auto=
 dry_run=
@@ -85,4 +85,4 @@ log_color $gray "screen bin = ${screen_bin}"
 log_color $gray "screen default config = ${screen_default_config}"
 log_color $gray "screen options = ${screen_options}"
 
-echo "screen .screenrc"
+screen .screenrc
