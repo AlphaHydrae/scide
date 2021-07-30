@@ -1,8 +1,8 @@
 source $HOME/.screenrc
 
-screen -t vim 0
+screen -t editor 0
 stuff "\${PROJECT_EDITOR-\$EDITOR}\012"
-screen -t zsh 1
+screen -t shell 1
 screen -t spec 2
-stuff "rake"
+stuff "echo No tests"
 select vim

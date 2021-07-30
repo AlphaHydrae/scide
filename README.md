@@ -2,11 +2,6 @@
 
 **[GNU Screen](http://www.gnu.org/software/screen/) IDE.**
 
-[![Gem Version](https://badge.fury.io/rb/scide.png)](http://badge.fury.io/rb/scide)
-[![Dependency Status](https://gemnasium.com/AlphaHydrae/scide.png)](https://gemnasium.com/AlphaHydrae/scide)
-[![Build Status](https://secure.travis-ci.org/AlphaHydrae/scide.png)](http://travis-ci.org/AlphaHydrae/scide)
-[![Coverage Status](https://coveralls.io/repos/AlphaHydrae/scide/badge.png?branch=master)](https://coveralls.io/r/AlphaHydrae/scide?branch=master)
-
 The `scide` command wraps `screen` to automatically use `.screenrc` files in the current directory or in project directories.
 
 ## Installation

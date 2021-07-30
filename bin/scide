@@ -1,3 +1,88 @@
-#!/usr/bin/env ruby
-require File.join(File.dirname(__FILE__), '..', 'lib', 'scide')
-Scide::Program.new.run!
+#!/usr/bin/env bash
+set -e
+
+bold=1
+red=31
+green=32
+yellow=33
+magenta=35
+cyan=36
+gray=90
+
+log_color() {
+  local color="$1"
+  shift
+  local message="$@"
+
+  if is_interactive; then
+    >&2 echo -e "\033[${color}m${message}\033[0m"
+  else
+    >&2 echo "$message"
+  fi
+}
+
+is_interactive() {
+  test "${-#*i}" != "$-" || test -t 0 || test -n "$PS1"
+}
+
+local_cleanup() {
+  local tmp_dir="$1"
+  test -n "$tmp_dir" && test -d "$tmp_dir" && rm -fr "$tmp_dir"
+}
+
+tmp_dir=`mktemp -d -t scide.XXX`
+trap "local_cleanup $tmp_dir" EXIT
+
+auto=
+dry_run=
+projects_dir=
+screen_bin="${SCIDE_BIN:-screen}"
+screen_default_config="~/.screenrc.default"
+screen_options="${SCIDE_SCREEN:-"-U"}"
+
+POSITIONAL=()
+while [[ "$#" -gt 0 ]]; do
+  key="$1"
+  shift
+
+  case "$key" in
+    -a|--auto)
+      auto=true
+    ;;
+    --default)
+      screen_default_config="$1"
+      shift
+    ;;
+    -d|--dry-run)
+      dry_run=true
+    ;;
+    -n|--noop)
+      dry_run=true
+    ;;
+    -p|--projects)
+      projects_dir="$1"
+      shift
+    ;;
+    -s|-screen)
+      screen_options="$1"
+      shift
+    ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
+    ;;
+  esac
+done
+
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+dir="$1"
+
+log_color $gray "auto = ${auto:-false}"
+log_color $gray "dry run = ${dry_run:-false}"
+log_color $gray "projects directory = ${projects_dir:-ø}"
+log_color $gray "screen bin = ${screen_bin}"
+log_color $gray "screen default config = ${screen_default_config}"
+log_color $gray "screen options = ${screen_options}"
+
+echo "screen .screenrc"
