@@ -9,7 +9,24 @@ magenta=35
 cyan=36
 gray=90
 
-log_color() {
+function cleanup() {
+  local tmp_dir="$1"
+  test -n "$tmp_dir" && test -d "$tmp_dir" && rm -fr "$tmp_dir"
+}
+
+function command_exists() {
+  local command="$1"
+  hash "$command" &>/dev/null
+}
+
+function fail() {
+  local code="$1"
+  shift
+  >&2 echo "$@"
+  exit $code
+}
+
+function log_color() {
   local color="$1"
   shift
   local message="$@"
@@ -21,21 +38,16 @@ log_color() {
   fi
 }
 
-is_interactive() {
+function is_interactive() {
   test "${-#*i}" != "$-" || test -t 0 || test -n "$PS1"
 }
 
-cleanup() {
-  local tmp_dir="$1"
-  test -n "$tmp_dir" && test -d "$tmp_dir" && rm -fr "$tmp_dir"
-}
-
-tmp_dir=`mktemp -d -t scide.XXX`
+tmp_dir=`mktemp -d -t scide.XXXXXX`
 trap "cleanup $tmp_dir" EXIT
 
-auto=
-dry_run=
-projects_dir=
+auto="${SCIDE_AUTO:-false}"
+dry_run="${SCIDE_DRY_RUN:-false}"
+projects_dir="$SCIDE_PROJECTS"
 screen_bin="${SCIDE_BIN:-screen}"
 screen_default_config="~/.screenrc.default"
 screen_options="${SCIDE_SCREEN:-"-U"}"
@@ -49,14 +61,15 @@ while [[ "$#" -gt 0 ]]; do
     -a|--auto)
       auto=true
     ;;
+    -b|--bin)
+      screen_bin="$1"
+      shift
+    ;;
     --default)
       screen_default_config="$1"
       shift
     ;;
     -d|--dry-run)
-      dry_run=true
-    ;;
-    -n|--noop)
       dry_run=true
     ;;
     -p|--projects)
@@ -74,15 +87,19 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
-set -- "${POSITIONAL[@]}" # restore positional parameters
+# Restore positional parameters.
+set -- "${POSITIONAL[@]}"
 
 dir="$1"
 
-log_color $gray "auto = ${auto:-false}"
-log_color $gray "dry run = ${dry_run:-false}"
-log_color $gray "projects directory = ${projects_dir:-ø}"
-log_color $gray "screen bin = ${screen_bin}"
-log_color $gray "screen default config = ${screen_default_config}"
-log_color $gray "screen options = ${screen_options}"
+[ "$auto" != "false" ] && fail 42 "Auto not yet implemented"
+[ "$dry_run" != "false" ] && fail 42 "Dry run not yet implemented"
+test -n "$projects_dir" && fail 42 "Projects directory not yet implemented"
 
-screen .screenrc
+if test -e "$screen_bin"; then
+  test -x "$screen_bin" || fail 101 "Screen binary '${screen_bin}' is not executable"
+else
+  command_exists "$screen_bin" || fail 100 "Screen binary '${screen_bin}' not found"
+fi
+
+"$screen_bin" $screen_options .screenrc

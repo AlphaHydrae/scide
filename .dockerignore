@@ -1,3 +1,5 @@
+/Dockerfile
+/.dockerignore
 /.editorconfig
 /LICENSE.txt
 /README.md

@@ -1,8 +1,6 @@
 source $HOME/.screenrc
 
-screen -t editor 0
-stuff "\${PROJECT_EDITOR-\$EDITOR}\012"
-screen -t shell 1
-screen -t spec 2
-stuff "echo No tests"
-select vim
+screen -t sh 0
+screen -t spec 1
+stuff "make check-docker-watch\012"
+select sh
