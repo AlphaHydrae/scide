@@ -2,11 +2,18 @@
 load "helper"
 
 function setup() {
-  setup_mocks
+  common_setup
 }
 
-@test "run screen in UTF-8 mode with the .screenrc configuration file in the current directory by default" {
+@test "scide runs screen in UTF-8 mode with the .screenrc configuration file in the current directory by default" {
+  touch .screenrc
   run scide
-  [ "$status" -eq 0 ]
-  [ "$(screen_mock_executions)" = "screen -U .screenrc" ]
+  assert_success
+  assert_screen_called_with -U .screenrc
+}
+
+@test "scide refuses to run screen without a .screenrc configuration file in the current directory by default" {
+  run scide
+  assert_failure 102
+  assert_screen_not_called
 }

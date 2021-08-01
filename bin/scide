@@ -102,4 +102,6 @@ else
   command_exists "$screen_bin" || fail 100 "Screen binary '${screen_bin}' not found"
 fi
 
+test -e .screenrc || fail 102 ".screenrc not found in current directory $PWD"
+
 "$screen_bin" $screen_options .screenrc

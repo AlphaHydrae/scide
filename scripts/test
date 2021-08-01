@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-function cleanup() {
-  local tmp_dir="$1"
-  test -n "$tmp_dir" && test -d "$tmp_dir" && rm -fr "$tmp_dir"
-}
-
 function fail() {
   >&2 echo "$@"
   exit 1
@@ -25,13 +20,6 @@ function watch() {
   done
 }
 
-tmp_dir=`mktemp -d -t scide.tests.XXXXXX`
-trap "cleanup $tmp_dir" EXIT
-
-bin_dir="${PWD}/bin"
-mocks_dir="${PWD}/tests/mocks"
-screen_mock="${mocks_dir}/screen"
-screen_mock_data_file="${tmp_dir}/screen-mock"
 watch=
 
 POSITIONAL=()
@@ -53,17 +41,13 @@ done
 # Restore positional parameters.
 set -- "${POSITIONAL[@]}"
 
+mocks_dir="${PWD}/tests/mocks"
+screen_mock="${mocks_dir}/screen"
 test -d "$mocks_dir" && test -x "$screen_mock" \
   || fail "Could not find screen mock; make sure to execute the tests from the root of the repository"
 
 function run_tests() {
-  unset SCIDE_AUTO
-  unset SCIDE_BIN
-  unset SCIDE_PROJECTS
-  PATH="$bin_dir:$mocks_dir:$PATH" \
-    SCREEN_MOCK_DATA_FILE="$screen_mock_data_file" \
-    SCIDE_TESTS_TMP_DIR="$tmp_dir" \
-    bats ./tests/
+  bats -j "$(nproc --all)" ./tests/
 }
 
 test -n "$watch" && watch "run_tests" || run_tests

@@ -24,25 +24,22 @@ function setup() {
 }
 
 @test "cannot run a non-executable screen binary specified through the -b option" {
-  non_executable_screen="$(tmp_path screen)"
-  touch "$non_executable_screen"
-  run scide -b "$non_executable_screen"
+  touch non_executable_screen
+  run scide -b non_executable_screen
   assert_failure 101
   assert_screen_not_called
 }
 
 @test "cannot run a non-executable screen binary specified through the --bin option" {
-  non_executable_screen="$(tmp_path screen)"
-  touch "$non_executable_screen"
-  run scide --bin "$non_executable_screen"
+  touch non_executable_screen
+  run scide --bin non_executable_screen
   assert_failure 101
   assert_screen_not_called
 }
 
 @test "cannot run a non-executable screen binary specified through the \$SCIDE_BIN environment variable" {
-  non_executable_screen="$(tmp_path screen)"
-  touch "$non_executable_screen"
-  SCIDE_BIN="$non_executable_screen" run scide
+  touch non_executable_screen
+  SCIDE_BIN="non_executable_screen" run scide
   assert_failure 101
   assert_screen_not_called
 }
