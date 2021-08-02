@@ -8,13 +8,13 @@ screen_mock="${mocks_dir}/screen"
 tmp_dirs=()
 trap "cleanup $tmp_dir" EXIT
 
-function assert_screen_called_with() {
-  local options="$@"
+function assert_screen_called() {
+  local expected_execution="$@"
 
   local executions="$(screen_mock_executions)"
-  test -n "$executions" || fail "expected screen to be called with '$options' but it was not called"
-  [[ "$executions" == "screen $options" ]] || \
-    fail "expected screen to be called with '$options' but it was called like this: '$executions'"
+  test -n "$executions" || fail "expected screen to be called as '$expected_execution' but it was not called"
+  [[ "$executions" == "$expected_execution" ]] || \
+    fail "expected screen to be called as '$expected_execution' but it was called like this: '$executions'"
 }
 
 function assert_screen_not_called() {

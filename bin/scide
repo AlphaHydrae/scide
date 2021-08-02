@@ -42,6 +42,11 @@ function is_interactive() {
   test "${-#*i}" != "$-" || test -t 0 || test -n "$PS1"
 }
 
+function is_relative() {
+  local path="$1"
+  [[ "$path" = /* || "$path" = ~* ]]
+}
+
 tmp_dir=`mktemp -d -t scide.XXXXXX`
 trap "cleanup $tmp_dir" EXIT
 
@@ -96,10 +101,13 @@ dir="$1"
 [ "$dry_run" != "false" ] && fail 42 "Dry run not yet implemented"
 test -n "$projects_dir" && fail 42 "Projects directory not yet implemented"
 
-if test -e "$screen_bin"; then
-  test -x "$screen_bin" || fail 101 "Screen binary '${screen_bin}' is not executable"
-else
-  command_exists "$screen_bin" || fail 100 "Screen binary '${screen_bin}' not found"
+if ! command_exists "$screen_bin"; then
+  if test -e "$screen_bin"; then
+    test -x "$screen_bin" || fail 101 "Screen binary '${screen_bin}' is not executable"
+    is_relative "$screen_bin" && [[ "$screen_bin" == . ]] || screen_bin="./$screen_bin"
+  else
+    fail 100 "Screen binary '${screen_bin}' not found"
+  fi
 fi
 
 test -e .screenrc || fail 102 ".screenrc not found in current directory $PWD"
