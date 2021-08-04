@@ -2,14 +2,6 @@ name: build
 
 on:
   push:
-    paths-ignore:
-      - ".editorconfig"
-      - ".gitignore"
-      - ".screenrc"
-      - "LICENSE.txt"
-      - "README.md"
-      - "scripts/release"
-      - "TODO.md"
     tags-ignore:
       - "**"
   schedule:
