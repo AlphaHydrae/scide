@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -e
+
+fail() {
+  >&2 echo "$@"
+  exit 1
+}
+
+test -z "$(git status --porcelain)" || fail "Commit changes before releasing"
+
+version="$1"
+[ $# -lt 1 ] && fail "The version to release must be provided as the first argument"
+[ $# -gt 1 ] && fail "This script only takes one argument"
+[[ "$version" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]] || fail "Version '${version}' is not a valid semver version"
+
+echo "Updating version to ${version}..."
+sed -i '' "s/version=.*/version=${version}/" bin/scide
+
+echo "Committing..."
+git add bin/scide
+git commit -m "v${version}"
+
+echo "Creating tag v${version}..."
+git tag "v${version}"
+
+echo "Pushing..."
+git push --tags origin main

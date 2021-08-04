@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+version=1.2.3
+
 bold=1
 red=31
 green=32
@@ -84,6 +86,10 @@ while [[ "$#" -gt 0 ]]; do
     -s|--screen)
       screen_options="$1"
       shift
+    ;;
+    -v|--version)
+      echo "$(basename "$0") $version"
+      exit 0
     ;;
     *)
       POSITIONAL+=("$1")

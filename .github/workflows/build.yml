@@ -8,6 +8,7 @@ on:
       - ".screenrc"
       - "LICENSE.txt"
       - "README.md"
+      - "scripts/release"
       - "TODO.md"
     tags-ignore:
       - "**"
