@@ -24,6 +24,8 @@ jobs:
 
       - name: Checkout the repository
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Install asdf
         uses: asdf-vm/actions/setup@v1
