@@ -59,10 +59,10 @@ screen_options="${SCIDE_SCREEN:-"-U"}"
 
 POSITIONAL=()
 while [[ "$#" -gt 0 ]]; do
-  key="$1"
+  option="$1"
   shift
 
-  case "$key" in
+  case "$option" in
     -a|--auto)
       auto=true
     ;;
@@ -81,7 +81,7 @@ while [[ "$#" -gt 0 ]]; do
       projects_dir="$1"
       shift
     ;;
-    -s|-screen)
+    -s|--screen)
       screen_options="$1"
       shift
     ;;
