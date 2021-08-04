@@ -26,7 +26,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     cp "$screen_mock" foo
     $run_func foo
     assert_success
-    assert_screen_called "./foo" -U .screenrc
+    assert_screen_called "./foo" -U -c .screenrc
   done
 }
 
@@ -37,7 +37,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     cp "$screen_mock" screen
     $run_func screen
     assert_success
-    assert_screen_called "$screen_mock" -U .screenrc
+    assert_screen_called "$screen_mock" -U -c .screenrc
   done
 }
 
@@ -48,7 +48,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     cp "$screen_mock" screen
     $run_func ./screen
     assert_success
-    assert_screen_called ./screen -U .screenrc
+    assert_screen_called ./screen -U -c .screenrc
   done
 }
 

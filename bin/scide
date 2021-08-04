@@ -118,4 +118,4 @@ fi
 
 test -e .screenrc || fail 102 ".screenrc not found in current directory $PWD"
 
-"$screen_bin" $screen_options .screenrc
+"$screen_bin" $screen_options -c .screenrc

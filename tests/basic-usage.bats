@@ -9,7 +9,7 @@ function setup() {
   touch .screenrc
   run scide
   assert_success
-  assert_screen_called "$screen_mock" -U .screenrc
+  assert_screen_called "$screen_mock" -U -c .screenrc
 }
 
 @test "cannot run screen without a .screenrc configuration file in the current directory" {
