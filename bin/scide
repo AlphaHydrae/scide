@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-version=1.2.3
+version=2.0.0
 
 bold=1
 red=31
