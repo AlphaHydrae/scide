@@ -35,3 +35,7 @@ jobs:
       - name: Run automated tests
         run: |
           make
+
+      - name: Print version
+        run: |
+          ./bin/scide --version
