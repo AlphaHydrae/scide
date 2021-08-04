@@ -14,6 +14,3 @@ check-docker-watch: docker
 
 docker:
 	docker build --quiet -t alphahydrae/scide-tests .
-
-release:
-	./scripts/release
