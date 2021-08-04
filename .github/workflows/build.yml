@@ -1,0 +1,40 @@
+name: build
+
+on:
+  push:
+    paths-ignore:
+      - ".editorconfig"
+      - ".gitignore"
+      - ".screenrc"
+      - "LICENSE.txt"
+      - "README.md"
+      - "TODO.md"
+    tags-ignore:
+      - "**"
+  schedule:
+    # Minute (0-59), Hour (0-23), Day of the month (1-31), Month of the Year (1-12), Day of the week (0-6, 0 = Sunday)
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  automated-tests:
+    runs-on: ubuntu-20.04
+    name: Run automated tests
+    steps:
+
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Install asdf
+        uses: asdf-vm/actions/setup@v1
+        with:
+          asdf_branch: v0.8.1
+
+      - name: Install Bats with asdf
+        run: |
+          asdf plugin add bats
+          asdf install bats
+
+      - name: Run automated tests
+        run: |
+          make
