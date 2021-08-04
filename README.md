@@ -2,11 +2,11 @@
 
 **[GNU Screen](http://www.gnu.org/software/screen/) IDE.**
 
-The `scide` command wraps `screen` to automatically use `.screenrc` files in the current directory or in project directories.
+The `scide` command wraps `screen` to automatically use `.screenrc` files in the
+current directory or in project directories.
 
-## Installation
-
-    gem install scide
+[![Build](https://github.com/AlphaHydrae/scide/actions/workflows/build.yml/badge.svg)](https://github.com/AlphaHydrae/scide/actions/workflows/build.yml)
+[![MIT License](https://img.shields.io/static/v1?label=license&message=MIT&color=informational)](https://opensource.org/licenses/MIT)
 
 ## Usage
 
@@ -14,36 +14,6 @@ Assuming your project screen configuration is in `~/src/my-project/.screenrc`.
 
     cd ~/src/my-project
     scide
-
-With the **-p, --projects PROJECTS_DIR** option, `scide` will know your project directory so you can open from elsewhere.
-
-    cd /elsewhere
-    scide -p ~/src my-project
-
-You can also set the `$SCIDE_PROJECTS` environment variable:
-
-    export SCIDE_PROJECTS=~/src
-    scide my-project
-
-### Without a .screenrc file
-
-If you don't already have a .screenrc configuration file, `scide` can open your project with a default configuration.
-
-    cd ~/other-project
-    scide --auto
-
-This will open `screen` with two named windows:
-
-* **editor** will launch your favorite editor (`$PROJECT_EDITOR` or `$EDITOR`);
-* **shell** will launch a new shell.
-
-### Add a .screenrc file
-
-To add a .screenrc file to your project:
-
-    cd ~/other-project
-    scide setup
-    cat .screenrc
 
 ## Screen options
 
@@ -56,8 +26,3 @@ To add a .screenrc file to your project:
 
   Customize screen options (`-U` by default).
   This can also be set with the `$SCIDE_SCREEN` environment variable.
-
-## Meta
-
-* **Author:** Simon Oulevay (Alpha Hydrae)
-* **License:** MIT (see [LICENSE.txt](https://raw.github.com/AlphaHydrae/scide/master/LICENSE.txt))
