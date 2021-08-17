@@ -32,11 +32,12 @@ jobs:
           asdf plugin add bats
           asdf install bats
 
-      # Note: python is used by the automated tests.
-      - name: Install Python with asdf
-        run: |
-          asdf plugin add python
-          asdf install python
+      # Note: python is used by the automated tests. Install it directly rather
+      # than with asdf because it is much faster.
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.6
 
       - name: Run automated tests
         run: |
