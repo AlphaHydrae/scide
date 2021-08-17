@@ -25,6 +25,7 @@ run_variants="run_with_s_option run_with_screen_option run_with_scide_screen_env
     touch .screenrc
     $run_func "-a -b"
     assert_success
+    refute_output
     assert_screen_called "$screen_mock" -a -b -c .screenrc
   done
 }

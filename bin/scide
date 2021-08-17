@@ -59,7 +59,7 @@ screen_bin="${SCIDE_BIN:-screen}"
 screen_default_config="~/.screenrc.default"
 screen_options="${SCIDE_SCREEN:-"-U"}"
 
-POSITIONAL=()
+positional_args=()
 while [[ "$#" -gt 0 ]]; do
   option="$1"
   shift
@@ -92,30 +92,47 @@ while [[ "$#" -gt 0 ]]; do
       exit 0
     ;;
     *)
-      POSITIONAL+=("$1")
-      shift
+      positional_args+=("$option")
     ;;
   esac
 done
 
 # Restore positional parameters.
-set -- "${POSITIONAL[@]}"
+set -- "${positional_args[@]}"
 
-dir="$1"
+target="$1"
 
 [ "$auto" != "false" ] && fail 42 "Auto not yet implemented"
-[ "$dry_run" != "false" ] && fail 42 "Dry run not yet implemented"
-test -n "$projects_dir" && fail 42 "Projects directory not yet implemented"
 
 if ! command_exists "$screen_bin"; then
   if test -e "$screen_bin"; then
-    test -x "$screen_bin" || fail 101 "Screen binary '${screen_bin}' is not executable"
+    test -x "$screen_bin" || fail 101 "screen binary $screen_bin is not executable"
     is_relative "$screen_bin" && [[ "$screen_bin" == . ]] || screen_bin="./$screen_bin"
   else
-    fail 100 "Screen binary '${screen_bin}' not found"
+    fail 100 "screen binary $screen_bin not found"
   fi
 fi
 
-test -e .screenrc || fail 102 ".screenrc not found in current directory $PWD"
+config_file=".screenrc"
+if test -f "$target"; then
+  config_file="$target"
+  test -r "$config_file" || fail 103 "$config_file is not readable"
+elif test -d "$target"; then
+  config_file="${target}/.screenrc"
+  test -x "$target" || fail 103 "directory $target is not traversable"
+  test -f "$config_file" || fail 102 ".screenrc not found in directory $target"
+  test -r "$config_file" || fail 103 "$config_file is not readable"
+elif test -e "$target"; then
+  fail 104 "$target is not a file or directory"
+else
+  test -e "$config_file" || fail 102 "$config_file not found in current directory $PWD"
+  test -r "$config_file" || fail 103 "$config_file in $PWD is not readable"
+fi
 
-"$screen_bin" $screen_options -c .screenrc
+command=("$screen_bin" $screen_options -c "$config_file")
+
+if [ "$dry_run" = "true" ]; then
+  echo "${command[@]}"
+else
+  "${command[@]}"
+fi
