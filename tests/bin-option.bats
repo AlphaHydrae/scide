@@ -17,6 +17,10 @@ function setup() {
   common_setup
 }
 
+function teardown() {
+  common_teardown
+}
+
 run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
 
 @test "run a custom screen binary with the -b|--bin option or \$SCIDE_BIN environment variable" {
@@ -29,6 +33,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     refute_output
     assert_screen_called "./foo" -U -c .screenrc
     assert_screen_config .screenrc foo
+    verify
   done
 }
 
@@ -42,6 +47,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     refute_output
     assert_screen_called "$screen_mock" -U -c .screenrc
     assert_screen_config .screenrc bar
+    verify
   done
 }
 
@@ -55,6 +61,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     refute_output
     assert_screen_called ./screen -U -c .screenrc
     assert_screen_config .screenrc baz
+    verify
   done
 }
 
@@ -65,6 +72,7 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     assert_failure 100
     assert_output "screen binary foo not found"
     assert_screen_not_called
+    verify
   done
 }
 
@@ -76,5 +84,6 @@ run_variants="run_with_b_option run_with_bin_option run_with_scide_bin_env_var"
     assert_failure 101
     assert_output "screen binary non_executable_screen is not executable"
     assert_screen_not_called
+    verify
   done
 }

@@ -5,6 +5,10 @@ function setup() {
   common_setup
 }
 
+function teardown() {
+  common_teardown
+}
+
 @test "run screen in UTF-8 mode with the .screenrc configuration file in the current directory" {
   echo "foo" > .screenrc
   run scide

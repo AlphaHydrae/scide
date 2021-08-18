@@ -5,6 +5,10 @@ function setup() {
   common_setup
 }
 
+function teardown() {
+  common_teardown
+}
+
 function run_with_a_option() {
   run scide -a
 }
@@ -41,5 +45,6 @@ EOF
     assert_screen_called_with_tmp_config "$screen_mock" -U > .config-file-path
     config_file="$(cat .config-file-path)"
     assert_screen_config "$config_file" "$default_screenrc"
+    verify
   done
 }

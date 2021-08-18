@@ -17,6 +17,10 @@ function setup() {
   common_setup
 }
 
+function teardown() {
+  common_teardown
+}
+
 run_variants="run_with_s_option run_with_screen_option run_with_scide_screen_env_var"
 
 @test "run screen with custom options with the -s|--screen option or \$SCIDE_SCREEN environment variable" {
@@ -28,5 +32,6 @@ run_variants="run_with_s_option run_with_screen_option run_with_scide_screen_env
     refute_output
     assert_screen_called "$screen_mock" -a -b -c .screenrc
     assert_screen_config .screenrc foo
+    verify
   done
 }

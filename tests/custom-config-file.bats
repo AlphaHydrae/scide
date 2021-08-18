@@ -5,6 +5,10 @@ function setup() {
   common_setup
 }
 
+function teardown() {
+  common_teardown
+}
+
 @test "run screen with the specified .screenrc configuration file" {
   mkdir -p foo/bar
   echo foo > foo/bar/.screenrc

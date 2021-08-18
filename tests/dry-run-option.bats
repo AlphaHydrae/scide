@@ -17,6 +17,10 @@ function setup() {
   common_setup
 }
 
+function teardown() {
+  common_teardown
+}
+
 run_variants="run_with_d_option run_with_dry_run_option run_with_scide_dry_run_env_var"
 
 @test "run a custom screen binary with the -d|--dry-run option or \$SCIDE_DRY_RUN environment variable" {
@@ -27,5 +31,6 @@ run_variants="run_with_d_option run_with_dry_run_option run_with_scide_dry_run_e
     assert_success
     assert_output "screen -U -c .screenrc"
     assert_screen_not_called
+    verify
   done
 }

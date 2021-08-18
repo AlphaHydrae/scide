@@ -16,6 +16,8 @@ function assert_screen_called() {
   test -n "$executions" || fail "expected screen to be called as '$expected_execution' but it was not called"
   [[ "$executions" == "$expected_execution" ]] || \
     fail "expected screen to be called as '$expected_execution' but it was called like this: '$executions'"
+
+  screen_call_assertions=$(( $screen_call_assertions + 1 ))
 }
 
 function assert_screen_called_with_tmp_config() {
@@ -30,10 +32,16 @@ function assert_screen_called_with_tmp_config() {
   local start=$(( $strip + 1 ))
   local config_file="$(echo -n "$executions"|cut -c${start}-1000)"
   echo -n "$config_file"
+
+  screen_call_assertions=$(( $screen_call_assertions + 1 ))
 }
 
 function assert_screen_not_called() {
   [[ "$(screen_mock_executions)" == "" ]] || fail "screen was called: $(screen_mock_executions)"
+  assert_no_screen_config
+
+  screen_call_assertions=$(( $screen_call_assertions + 1 ))
+  screen_config_assertions=$(( $screen_config_assertions + 1 ))
 }
 
 function assert_screen_config() {
@@ -42,6 +50,14 @@ function assert_screen_config() {
   local expected_config="$@"
 
   assert_equal "$(screen_mock_config)" "${expected_config_file}${new_line}${expected_config}"
+
+  screen_config_assertions=$(( $screen_config_assertions + 1 ))
+}
+
+function assert_no_screen_config() {
+  if test -e "$SCREEN_MOCK_CONFIG_FILE"; then
+    fail "screen was called with a configuration file"
+  fi
 }
 
 function begins_with() {
@@ -85,6 +101,15 @@ function common_setup() {
   setup_mocks
 }
 
+function common_teardown() {
+  verify
+}
+
+function verify() {
+  assert_equal "total screen calls $screen_call_assertions" "total screen calls 1"
+  assert_equal "total screen config files $screen_config_assertions" "total screen config files 1"
+}
+
 function fail() {
   local msg="$@"
 
@@ -95,6 +120,8 @@ function fail() {
 function setup_mocks() {
   test -f "$SCREEN_MOCK_CONFIG_FILE" && rm -f "$SCREEN_MOCK_CONFIG_FILE"
   test -n "$SCREEN_MOCK_DATA_FILE" && echo -n "" > "$SCREEN_MOCK_DATA_FILE"
+  screen_call_assertions=0
+  screen_config_assertions=0
 }
 
 function screen_mock_config() {
