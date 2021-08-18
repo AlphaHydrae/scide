@@ -11,7 +11,7 @@ function setup() {
   assert_success
   refute_output
   assert_screen_called "$screen_mock" -U -c .screenrc
-  assert_screen_config "foo"
+  assert_screen_config .screenrc foo
 }
 
 @test "cannot run screen without a .screenrc configuration file in the current directory" {

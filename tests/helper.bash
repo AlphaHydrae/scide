@@ -4,17 +4,32 @@ set -e
 bin_dir="${PWD}/bin"
 mocks_dir="${PWD}/tests/mocks"
 screen_mock="${mocks_dir}/screen"
+new_line=$'\n'
 
 tmp_dirs=()
 trap "cleanup $tmp_dir" EXIT
 
 function assert_screen_called() {
   local expected_execution="$@"
-
   local executions="$(screen_mock_executions)"
+
   test -n "$executions" || fail "expected screen to be called as '$expected_execution' but it was not called"
   [[ "$executions" == "$expected_execution" ]] || \
     fail "expected screen to be called as '$expected_execution' but it was called like this: '$executions'"
+}
+
+function assert_screen_called_with_tmp_config() {
+  local expected_execution="$@ -c "
+  local executions="$(screen_mock_executions)"
+
+  test -n "$executions" || fail "expected screen to be called as '$expected_execution' but it was not called"
+  begins_with "$executions" "$expected_execution" || \
+    fail "expected screen to be called as '${expected_execution}<tmp/.screenrc>' (with a temporary configuration file) but it was called like this: '$executions'"
+
+  local strip="$(echo -n "$expected_execution"|wc -m)"
+  local start=$(( $strip + 1 ))
+  local config_file="$(echo -n "$executions"|cut -c${start}-1000)"
+  echo -n "$config_file"
 }
 
 function assert_screen_not_called() {
@@ -22,9 +37,22 @@ function assert_screen_not_called() {
 }
 
 function assert_screen_config() {
+  local expected_config_file="$1"
+  shift
   local expected_config="$@"
 
-  [[ "$(screen_mock_config)" == "$expected_config" ]]
+  assert_equal "$(screen_mock_config)" "${expected_config_file}${new_line}${expected_config}"
+}
+
+function begins_with() {
+  case "$1" in
+    "$2"*)
+      true
+    ;;
+    *)
+      false
+    ;;
+  esac
 }
 
 function cleanup() {

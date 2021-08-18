@@ -59,6 +59,15 @@ screen_bin="${SCIDE_BIN:-screen}"
 screen_default_config="~/.screenrc.default"
 screen_options="${SCIDE_SCREEN:-"-U"}"
 
+default_screenrc=$(cat <<-EOF
+source $HOME/.screenrc
+screen -t editor 0
+stuff "\\$EDITOR\\012"
+screen -t shell 1
+select editor
+EOF
+)
+
 positional_args=()
 while [[ "$#" -gt 0 ]]; do
   option="$1"
@@ -102,8 +111,7 @@ set -- "${positional_args[@]}"
 
 target="$1"
 
-[ "$auto" != "false" ] && fail 42 "Auto not yet implemented"
-
+# Check screen command availability.
 if ! command_exists "$screen_bin"; then
   if test -e "$screen_bin"; then
     test -x "$screen_bin" || fail 101 "screen binary $screen_bin is not executable"
@@ -113,6 +121,7 @@ if ! command_exists "$screen_bin"; then
   fi
 fi
 
+# Determine path to configuration file.
 config_file=".screenrc"
 if test -f "$target"; then
   config_file="$target"
@@ -124,6 +133,10 @@ elif test -d "$target"; then
   test -r "$config_file" || fail 103 "$config_file is not readable"
 elif test -e "$target"; then
   fail 104 "$target is not a file or directory"
+elif [[ "$auto" == "true" ]]; then
+  # Generate temporary configuration file.
+  config_file="${tmp_dir}/.screenrc"
+  echo "$default_screenrc" > "$config_file"
 else
   test -e "$config_file" || fail 102 "$config_file not found in current directory $PWD"
   test -r "$config_file" || fail 103 "$config_file in $PWD is not readable"

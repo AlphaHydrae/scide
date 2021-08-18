@@ -27,6 +27,6 @@ run_variants="run_with_s_option run_with_screen_option run_with_scide_screen_env
     assert_success
     refute_output
     assert_screen_called "$screen_mock" -a -b -c .screenrc
-    assert_screen_config "foo"
+    assert_screen_config .screenrc foo
   done
 }

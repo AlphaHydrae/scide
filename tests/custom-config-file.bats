@@ -12,7 +12,7 @@ function setup() {
   assert_success
   refute_output
   assert_screen_called "$screen_mock" -U -c foo/bar/.screenrc
-  assert_screen_config "foo"
+  assert_screen_config foo/bar/.screenrc foo
 }
 
 @test "cannot run screen with a custom .screenrc configuration file if it is not readable" {
@@ -31,7 +31,7 @@ function setup() {
   assert_success
   refute_output
   assert_screen_called "$screen_mock" -U -c foo/bar/.screenrc
-  assert_screen_config "bar"
+  assert_screen_config foo/bar/.screenrc bar
 }
 
 @test "cannot run screen with a custom .screenrc configuration file in the specified directory if that directory is not traversable" {

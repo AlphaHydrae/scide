@@ -28,6 +28,8 @@ done
 # Restore positional parameters.
 set -- "${args[@]}"
 
-test -f "$config_file" && cat "$config_file" >> "$SCREEN_MOCK_CONFIG_FILE"
+test -f "$config_file" && \
+  echo "$config_file" >> "$SCREEN_MOCK_CONFIG_FILE" && \
+  cat "$config_file" >> "$SCREEN_MOCK_CONFIG_FILE"
 
 echo "$0 $@" >> "$SCREEN_MOCK_DATA_FILE"
