@@ -6,11 +6,12 @@ function setup() {
 }
 
 @test "run screen in UTF-8 mode with the .screenrc configuration file in the current directory" {
-  touch .screenrc
+  echo "foo" > .screenrc
   run scide
   assert_success
   refute_output
   assert_screen_called "$screen_mock" -U -c .screenrc
+  assert_screen_config "foo"
 }
 
 @test "cannot run screen without a .screenrc configuration file in the current directory" {

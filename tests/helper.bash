@@ -21,6 +21,12 @@ function assert_screen_not_called() {
   [[ "$(screen_mock_executions)" == "" ]] || fail "screen was called: $(screen_mock_executions)"
 }
 
+function assert_screen_config() {
+  local expected_config="$@"
+
+  [[ "$(screen_mock_config)" == "$expected_config" ]]
+}
+
 function cleanup() {
   for dir in ${tmp_dirs[@]}; do
     test -n "$dir" && test -d "$dir" && rm -fr "$dir"
@@ -41,6 +47,7 @@ function common_setup() {
   unset SCIDE_SCREEN
 
   export SCREEN_MOCK_DATA_FILE="${tmp_dir}/screen-mock-data"
+  export SCREEN_MOCK_CONFIG_FILE="${tmp_dir}/screen-mock-config"
 
   PATH="$bin_dir:$mocks_dir:$PATH"
 
@@ -58,7 +65,12 @@ function fail() {
 }
 
 function setup_mocks() {
+  test -f "$SCREEN_MOCK_CONFIG_FILE" && rm -f "$SCREEN_MOCK_CONFIG_FILE"
   test -n "$SCREEN_MOCK_DATA_FILE" && echo -n "" > "$SCREEN_MOCK_DATA_FILE"
+}
+
+function screen_mock_config() {
+  cat "$SCREEN_MOCK_CONFIG_FILE"
 }
 
 function screen_mock_executions() {

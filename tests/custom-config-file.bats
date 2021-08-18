@@ -7,11 +7,12 @@ function setup() {
 
 @test "run screen with the specified .screenrc configuration file" {
   mkdir -p foo/bar
-  touch foo/bar/.screenrc
+  echo foo > foo/bar/.screenrc
   run scide foo/bar/.screenrc
   assert_success
   refute_output
   assert_screen_called "$screen_mock" -U -c foo/bar/.screenrc
+  assert_screen_config "foo"
 }
 
 @test "cannot run screen with a custom .screenrc configuration file if it is not readable" {
@@ -25,11 +26,12 @@ function setup() {
 
 @test "run screen with a .screenrc configuration file in the specified directory" {
   mkdir -p foo/bar
-  touch foo/bar/.screenrc
+  echo bar > foo/bar/.screenrc
   run scide foo/bar
   assert_success
   refute_output
   assert_screen_called "$screen_mock" -U -c foo/bar/.screenrc
+  assert_screen_config "bar"
 }
 
 @test "cannot run screen with a custom .screenrc configuration file in the specified directory if that directory is not traversable" {

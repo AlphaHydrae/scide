@@ -22,10 +22,11 @@ run_variants="run_with_s_option run_with_screen_option run_with_scide_screen_env
 @test "run screen with custom options with the -s|--screen option or \$SCIDE_SCREEN environment variable" {
   for run_func in $run_variants; do
     setup_mocks
-    touch .screenrc
+    echo foo > .screenrc
     $run_func "-a -b"
     assert_success
     refute_output
     assert_screen_called "$screen_mock" -a -b -c .screenrc
+    assert_screen_config "foo"
   done
 }

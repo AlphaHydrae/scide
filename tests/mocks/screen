@@ -8,4 +8,26 @@ fail() {
 
 test -w "$SCREEN_MOCK_DATA_FILE" || fail "\$SCREEN_MOCK_DATA_FILE must be set"
 
+config_file=
+
+args=()
+while [[ "$#" -gt 0 ]]; do
+  args+=("$1")
+  option="$1"
+  shift
+
+  case "$option" in
+    -c)
+      args+=("$1")
+      config_file="$1"
+      shift
+    ;;
+  esac
+done
+
+# Restore positional parameters.
+set -- "${args[@]}"
+
+test -f "$config_file" && cat "$config_file" >> "$SCREEN_MOCK_CONFIG_FILE"
+
 echo "$0 $@" >> "$SCREEN_MOCK_DATA_FILE"
