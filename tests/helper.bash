@@ -106,8 +106,8 @@ function common_teardown() {
 }
 
 function verify() {
-  assert_equal "total screen calls $screen_call_assertions" "total screen calls 1"
-  assert_equal "total screen config files $screen_config_assertions" "total screen config files 1"
+  assert_equal "total screen calls assertions $screen_call_assertions" "total screen calls assertions 1"
+  assert_equal "total screen config files assertions $screen_config_assertions" "total screen config files assertions 1"
 }
 
 function fail() {

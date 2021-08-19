@@ -56,13 +56,13 @@ auto="${SCIDE_AUTO:-false}"
 dry_run="${SCIDE_DRY_RUN:-false}"
 projects_dir="$SCIDE_PROJECTS"
 screen_bin="${SCIDE_BIN:-screen}"
-screen_default_config="~/.screenrc.default"
+screen_default_config="$HOME/.config/scide/.screenrc.default"
 screen_options="${SCIDE_SCREEN:-"-U"}"
 
 default_screenrc=$(cat <<-EOF
-source $HOME/.screenrc
+source \$HOME/.screenrc
 screen -t editor 0
-stuff "\\$EDITOR\\012"
+stuff "\$EDITOR\\012"
 screen -t shell 1
 select editor
 EOF
@@ -136,7 +136,11 @@ elif test -e "$target"; then
 elif [[ "$auto" == "true" ]]; then
   # Generate temporary configuration file.
   config_file="${tmp_dir}/.screenrc"
-  echo "$default_screenrc" > "$config_file"
+  if test -r "$screen_default_config"; then
+    cat "$screen_default_config" > "$config_file"
+  else
+    echo "$default_screenrc" > "$config_file"
+  fi
 else
   test -e "$config_file" || fail 102 "$config_file not found in current directory $PWD"
   test -r "$config_file" || fail 103 "$config_file in $PWD is not readable"
