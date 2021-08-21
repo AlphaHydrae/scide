@@ -1,8 +1,9 @@
+/.ackrc
 /Dockerfile
 /.dockerignore
 /.editorconfig
-/LICENSE.txt
-/README.md
+/.envrc
+/*.md
 /.screenrc
-/TODO.md
 /.tool-versions
+/*.txt
