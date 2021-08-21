@@ -15,16 +15,20 @@ version="$1"
 [ $# -gt 1 ] && fail "This script only takes one argument"
 [[ "$version" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]] || fail "Version '${version}' is not a valid semver version"
 
+echo
 echo "Updating version to ${version}..."
 sed -i '' "s/version=.*/version=${version}/" bin/scide
 
+echo
 echo "Committing..."
 git add bin/scide
 git commit -m "v${version}"
 
+echo
 echo "Creating tag v${version}..."
 git tag "v${version}"
 
+echo
 echo "Pushing..."
 git push --tags origin main
 
