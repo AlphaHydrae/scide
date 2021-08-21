@@ -50,12 +50,12 @@ EOF
   done
 }
 
-@test "run screen with an automatically generated configuration based on ~/.config/scide/.screenrc.default" {
+@test "run screen with an automatically generated configuration based on ~/.config/scide/.screenrc" {
   custom_default_screenrc="$(printf "foo\nbar\n")"
   for run_func in $run_variants; do
     setup_mocks
     mkdir -p .config/scide
-    echo -n "$custom_default_screenrc" > .config/scide/.screenrc.default
+    echo -n "$custom_default_screenrc" > .config/scide/.screenrc
     HOME="$PWD" $run_func
     assert_success
     refute_output
@@ -67,16 +67,16 @@ EOF
   done
 }
 
-@test "cannot run screen with an automatically generated configuration if ~/.config/scide/.screenrc.default is not readable" {
+@test "cannot run screen with an automatically generated configuration if ~/.config/scide/.screenrc is not readable" {
   for run_func in $run_variants; do
     setup_mocks
     mkdir -p .config/scide
-    echo -n "$custom_default_screenrc" > .config/scide/.screenrc.default
+    echo -n "$custom_default_screenrc" > .config/scide/.screenrc
     chmod 100 .config/scide
-    chmod 200 .config/scide/.screenrc.default
+    chmod 200 .config/scide/.screenrc
     HOME="$PWD" $run_func
     assert_failure 103
-    assert_output "default configuration file ${PWD}/.config/scide/.screenrc.default is not readable"
+    assert_output "default configuration file ${PWD}/.config/scide/.screenrc is not readable"
     assert_screen_not_called
     verify
   done

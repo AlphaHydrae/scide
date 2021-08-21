@@ -56,7 +56,7 @@ auto="${SCIDE_AUTO:-false}"
 dry_run="${SCIDE_DRY_RUN:-false}"
 projects_dir="$SCIDE_PROJECTS"
 screen_bin="${SCIDE_BIN:-screen}"
-screen_default_config="${SCIDE_DEFAULT:-$HOME/.config/scide/.screenrc.default}"
+screen_default_config="${SCIDE_DEFAULT:-$HOME/.config/scide/.screenrc}"
 screen_options="${SCIDE_SCREEN:-"-U"}"
 
 default_screenrc=$(cat <<-EOF
@@ -81,10 +81,6 @@ while [[ "$#" -gt 0 ]]; do
       screen_bin="$1"
       shift
     ;;
-    -t|--default)
-      screen_default_config="$1"
-      shift
-    ;;
     -d|--dry-run)
       dry_run=true
     ;;
@@ -94,6 +90,10 @@ while [[ "$#" -gt 0 ]]; do
     ;;
     -s|--screen)
       screen_options="$1"
+      shift
+    ;;
+    -t|--default)
+      screen_default_config="$1"
       shift
     ;;
     -v|--version)
