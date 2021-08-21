@@ -45,6 +45,7 @@ EOF
     assert_screen_called_with_tmp_config "$screen_mock" -U > .config-file-path
     config_file="$(cat .config-file-path)"
     assert_screen_config "$config_file" "$default_screenrc"
+    refute [ -e "$config_file" ]
     verify
   done
 }
@@ -61,6 +62,22 @@ EOF
     assert_screen_called_with_tmp_config "$screen_mock" -U > .config-file-path
     config_file="$(cat .config-file-path)"
     assert_screen_config "$config_file" "$custom_default_screenrc"
+    refute [ -e "$config_file" ]
+    verify
+  done
+}
+
+@test "cannot run screen with an automatically generated configuration if ~/.config/scide/.screenrc.default is not readable" {
+  for run_func in $run_variants; do
+    setup_mocks
+    mkdir -p .config/scide
+    echo -n "$custom_default_screenrc" > .config/scide/.screenrc.default
+    chmod 100 .config/scide
+    chmod 200 .config/scide/.screenrc.default
+    HOME="$PWD" $run_func
+    assert_failure 103
+    assert_output "default configuration file ${PWD}/.config/scide/.screenrc.default is not readable"
+    assert_screen_not_called
     verify
   done
 }

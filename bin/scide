@@ -56,7 +56,7 @@ auto="${SCIDE_AUTO:-false}"
 dry_run="${SCIDE_DRY_RUN:-false}"
 projects_dir="$SCIDE_PROJECTS"
 screen_bin="${SCIDE_BIN:-screen}"
-screen_default_config="$HOME/.config/scide/.screenrc.default"
+screen_default_config="${SCIDE_DEFAULT:-$HOME/.config/scide/.screenrc.default}"
 screen_options="${SCIDE_SCREEN:-"-U"}"
 
 default_screenrc=$(cat <<-EOF
@@ -81,7 +81,7 @@ while [[ "$#" -gt 0 ]]; do
       screen_bin="$1"
       shift
     ;;
-    --default)
+    -t|--default)
       screen_default_config="$1"
       shift
     ;;
@@ -138,6 +138,8 @@ elif [[ "$auto" == "true" ]]; then
   config_file="${tmp_dir}/.screenrc"
   if test -r "$screen_default_config"; then
     cat "$screen_default_config" > "$config_file"
+  elif test -e "$screen_default_config"; then
+    fail 103 "default configuration file ${screen_default_config} is not readable"
   else
     echo "$default_screenrc" > "$config_file"
   fi
