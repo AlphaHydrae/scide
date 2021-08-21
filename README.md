@@ -3,26 +3,124 @@
 **[GNU Screen](http://www.gnu.org/software/screen/) IDE.**
 
 The `scide` command wraps `screen` to automatically use `.screenrc` files in the
-current directory or in project directories.
+current directory, in project directories, or automatically generated ones.
 
 [![Build](https://github.com/AlphaHydrae/scide/actions/workflows/build.yml/badge.svg)](https://github.com/AlphaHydrae/scide/actions/workflows/build.yml)
 [![MIT License](https://img.shields.io/static/v1?label=license&message=MIT&color=informational)](https://opensource.org/licenses/MIT)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Installation](#installation)
+- [Options](#options)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Requirements
+
+* [Bash](https://www.gnu.org/software/bash/) 3+
+
 ## Usage
 
-Assuming your project screen configuration is in `~/src/my-project/.screenrc`.
+Assuming your project has a screen configuration at
+`~/src/my-project/.screenrc`:
 
-    cd ~/src/my-project
-    scide
+```bash
+cd ~/src/my-project
+scide
+```
 
-## Screen options
+> This will basically run the command `screen -U -c .screenrc`.
 
-* **-b BIN, --bin BIN**
+You can specify directory where your projects live:
 
-  Use the bin option to give the path to your screen binary if it's not in the PATH or has a different name.
-  This can also be set with the `$SCIDE_BIN` environment variable.
+```bash
+cd ~
+scide --projects ~/src my-project
+```
 
-* **-s OPTIONS, --screen OPTIONS**
+You can do the same with the `$SCIDE_PROJECTS` environment variable, which you
+can put in your `.bash_profile` shell configuration file to avoid repeating
+yourself:
 
-  Customize screen options (`-U` by default).
-  This can also be set with the `$SCIDE_SCREEN` environment variable.
+```bash
+echo "export SCIDE_PROJECTS=~/src" >> ~/.bash_profile
+scide my-project
+```
+
+For new projects, scide can run screen with an automatically generated
+configuration for you:
+
+```bash
+mkdir ~/src/new-project
+cd ~/src/new-project
+scide --auto
+```
+
+> By default, this will open screen with a configuration that sources your own
+> `~/.screenrc` configuration and that has two tabs: one that opens your
+> favorite `$EDITOR`, and one with a shell.
+
+You can customize this default configuration by creating the file
+`~/.config/scide/.screenrc`:
+
+```bash
+cat > $FILE <<- EOM
+source \$HOME/.screenrc
+screen -t editor 0
+stuff "\$EDITOR\\012"
+screen -t shell 1
+select editor
+EOM
+```
+
+## Installation
+
+With [Homebrew](https://brew.sh):
+
+```bash
+brew tap alphahydrae/tools
+brew install scide
+```
+
+With [cURL](https://curl.se):
+
+```bash
+PREFIX=/usr/local/bin \
+  FROM=https://raw.githubusercontent.com && \
+  curl -sSLo $PREFIX/scide $FROM/AlphaHydrae/scide/main/bin/scide && \
+  chmod +x $PREFIX/scide
+```
+
+With [Wget](https://www.gnu.org/software/wget/):
+
+```bash
+PREFIX=/usr/local/bin \
+  FROM=https://raw.githubusercontent.com && \
+  wget -qO $PREFIX/scide $FROM/AlphaHydrae/scide/main/bin/scide && \
+  chmod +x $PREFIX/scide
+```
+
+Or [download
+it](https://raw.githubusercontent.com/AlphaHydrae/scide/main/bin/scide)
+yourself.
+
+## Options
+
+```
+General options:
+  -h, --help     output usage information, then exit
+  -v, --version  output current version, then exit
+
+Scide options:
+  -a, --auto            \$SCIDE_AUTO=true       use an automatically generated .screenrc (see the -t, --default option)
+  -d, --dry-run         \$SCIDE_DRY_RUN=true    output the screen command that would be run, then exit
+  -p, --projects <dir>  \$SCIDE_PROJECTS=<dir>  also search for a .screenrc relative to the specified directory
+  -t, --default <file>  \$SCIDE_DEFAULT=<file>  use a custom default configuration (defaults to "~/.config/scide/.screenrc")
+
+Screen options:
+  -b, --bin <command>     \$SCIDE_BIN=<bin>         use a custom screen binary (defaults to "screen")
+  -s, --screen <options>  \$SCIDE_SCREEN=<options>  use custom screen options (defaults to "-U")
+```
