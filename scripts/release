@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
-fail() {
+function fail() {
   >&2 echo "$@"
   exit 1
 }
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+
 test -z "$(git status --porcelain)" || fail "Commit changes before releasing"
 
 version="$1"
-[ $# -lt 1 ] && fail "The version to release must be provided as the first argument"
+[ $# -lt 1 ] && fail "The version to release must be provided as the first argument (current: $(./bin/scide --version))"
 [ $# -gt 1 ] && fail "This script only takes one argument"
 [[ "$version" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]] || fail "Version '${version}' is not a valid semver version"
 
@@ -25,3 +27,6 @@ git tag "v${version}"
 
 echo "Pushing..."
 git push --tags origin main
+
+# Release to homebrew.
+"$SCRIPT_DIR/homebrew"

@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -e
+
+function cleanup() {
+  local tmp_dir="$1"
+  test -n "$tmp_dir" && test -d "$tmp_dir" && rm -fr "$tmp_dir"
+}
+
+function fail() {
+  >&2 echo "$@"
+  exit 1
+}
+
+tmp_dir=`mktemp -d -t scide.homebrew.XXXXXX`
+trap "cleanup $tmp_dir" EXIT
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+REPO_URL="git@github.com:AlphaHydrae/homebrew-tools.git"
+
+cd "$tmp_dir"
+
+echo
+echo "Getting current version..."
+version="$("${SCRIPT_DIR}/../bin/scide" --version|sed 's/^scide //')"
+echo "$version"
+
+echo
+echo "Downloading release..."
+release_url="https://github.com/AlphaHydrae/scide/archive/v${version}.tar.gz"
+release_file="${version}.tar.gz"
+curl -sSLo "$release_file" "$release_url" || fail "Could not download ${release_url}"
+ls -lh "$release_file"
+
+echo
+echo "Hashing release..."
+digest="$(sha256sum "$release_file"|cut -d " " -f 1)"
+echo "$digest"
+
+echo
+echo "Cloning ${REPO_URL}..."
+git clone "$REPO_URL" repo
+
+echo
+echo "Updating Homebrew formula..."
+cd repo
+formula_file="Formula/scide.rb"
+escaped_release_url="$(echo "$release_url"|sed 's/\//\\\//g')"
+sed -i "" "s/url \"https:.*\"/url \"$escaped_release_url\"/" "$formula_file"
+sed -i "" "s/sha256 \"[a-z0-9]{64}\"/sha256 \"$digest\"/" "$formula_file"
+cat "$formula_file"
+
+echo
+echo "Committing..."
+git add "$formula_file"
+git commit -m "Update scide to ${version}"
+
+echo "Pushing..."
+git push origin master
+
+echo
