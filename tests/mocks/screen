@@ -6,7 +6,8 @@ fail() {
   exit 2
 }
 
-test -w "$SCREEN_MOCK_DATA_FILE" || fail "\$SCREEN_MOCK_DATA_FILE must be set"
+test -f "$SCREEN_MOCK_DATA_FILE" && test -w "$SCREEN_MOCK_DATA_FILE" || \
+  fail "\$SCREEN_MOCK_DATA_FILE must be set and must be a writable file"
 
 config_file=
 
