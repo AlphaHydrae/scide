@@ -46,7 +46,7 @@ cd repo
 formula_file="Formula/scide.rb"
 escaped_release_url="$(echo "$release_url"|sed 's/\//\\\//g')"
 sed -i "" "s/url \"https:.*\"/url \"$escaped_release_url\"/" "$formula_file"
-sed -i "" "s/sha256 \"[a-z0-9]{64}\"/sha256 \"$digest\"/" "$formula_file"
+sed -i "" "s/sha256 \"[a-z0-9]\{64\}\"/sha256 \"$digest\"/" "$formula_file"
 cat "$formula_file"
 
 echo
