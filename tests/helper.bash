@@ -87,6 +87,8 @@ function common_setup() {
 
   unset SCIDE_AUTO
   unset SCIDE_BIN
+  unset SCIDE_DEFAULT
+  unset SCIDE_DRY_RUN
   unset SCIDE_PROJECTS
   unset SCIDE_SCREEN
 
