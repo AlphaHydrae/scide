@@ -103,9 +103,7 @@ PREFIX=/usr/local/bin \
   chmod +x $PREFIX/scide
 ```
 
-Or [download
-it](https://raw.githubusercontent.com/AlphaHydrae/scide/main/bin/scide)
-yourself.
+Or [download it](https://github.com/AlphaHydrae/scide/releases) yourself.
 
 ## Options
 
