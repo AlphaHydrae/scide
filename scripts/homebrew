@@ -50,6 +50,11 @@ sed -i "" "s/sha256 \"[a-z0-9]{64}\"/sha256 \"$digest\"/" "$formula_file"
 cat "$formula_file"
 
 echo
+echo "Auditing & checking style of formula..."
+brew audit --formula "$formula_file"
+brew style "$formula_file"
+
+echo
 echo "Committing..."
 git add "$formula_file"
 git commit -m "Update scide to ${version}"
