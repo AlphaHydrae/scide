@@ -5,6 +5,7 @@
 The `scide` command wraps `screen` to automatically use `.screenrc` files in the
 current directory, in project directories, or automatically generated ones.
 
+[![Version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/AlphaHydrae/scide/main/badge.json)](https://github.com/AlphaHydrae/scide/releases)
 [![Build](https://github.com/AlphaHydrae/scide/actions/workflows/build.yml/badge.svg)](https://github.com/AlphaHydrae/scide/actions/workflows/build.yml)
 [![MIT License](https://img.shields.io/static/v1?label=license&message=MIT&color=informational)](https://opensource.org/licenses/MIT)
 
