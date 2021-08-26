@@ -114,14 +114,14 @@ General options:
   -v, --version  output current version, then exit
 
 Scide options:
-  -a, --auto            \$SCIDE_AUTO=true       use an automatically generated .screenrc (see the -t, --default option)
-  -d, --dry-run         \$SCIDE_DRY_RUN=true    output the screen command that would be run, then exit
-  -p, --projects <dir>  \$SCIDE_PROJECTS=<dir>  also search for a .screenrc relative to the specified directory
-  -t, --default <file>  \$SCIDE_DEFAULT=<file>  use a custom default configuration (defaults to "~/.config/scide/.screenrc")
+  -a, --auto            $SCIDE_AUTO=true       use an automatically generated .screenrc (see the -t, --default option)
+  -d, --dry-run         $SCIDE_DRY_RUN=true    output the screen command that would be run, then exit
+  -p, --projects <dir>  $SCIDE_PROJECTS=<dir>  also search for a .screenrc relative to the specified directory
+  -t, --default <file>  $SCIDE_DEFAULT=<file>  use a custom default configuration (defaults to "~/.config/scide/.screenrc")
 
 Screen options:
-  -b, --bin <command>     \$SCIDE_BIN=<bin>         use a custom screen binary (defaults to "screen")
-  -s, --screen <options>  \$SCIDE_SCREEN=<options>  use custom screen options (defaults to "-U")
+  -b, --bin <command>     $SCIDE_BIN=<bin>         use a custom screen binary (defaults to "screen")
+  -s, --screen <options>  $SCIDE_SCREEN=<options>  use custom screen options (defaults to "-U")
 ```
 
 ## Exit codes
