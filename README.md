@@ -15,6 +15,7 @@ current directory, in project directories, or automatically generated ones.
 - [Usage](#usage)
 - [Installation](#installation)
 - [Options](#options)
+- [Exit codes](#exit-codes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -122,3 +123,15 @@ Screen options:
   -b, --bin <command>     \$SCIDE_BIN=<bin>         use a custom screen binary (defaults to "screen")
   -s, --screen <options>  \$SCIDE_SCREEN=<options>  use custom screen options (defaults to "-U")
 ```
+
+## Exit codes
+
+Scide will exist with the following exit codes when known errors occur:
+
+| Code  | Description                                                                      |
+| :---- | :------------------------------------------------------------------------------- |
+| `100` | The `screen` binary cannot be found                                              |
+| `101` | The specific `screen` binary is not executable                                   |
+| `102` | The `.screenrc` configuration file cannot be found                               |
+| `103` | The `.screenrc` configuration file cannot be read due to file system permissions |
+| `104` | The path specified as the first argument is neither a file nor a directory       |
