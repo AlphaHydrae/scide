@@ -67,6 +67,19 @@ EOF
   done
 }
 
+@test "scide uses the .screenrc configuration file in the current directory instead of generating one with the -a|--auto option or \$SCIDE_AUTO environment variable" {
+  for run_func in $run_variants; do
+    setup_mocks
+    echo foo > .screenrc
+    $run_func
+    assert_success
+    refute_output
+    assert_screen_called "$screen_mock" -U -c .screenrc
+    assert_screen_config .screenrc foo
+    verify
+  done
+}
+
 @test "cannot run screen with an automatically generated configuration if ~/.config/scide/.screenrc is not readable" {
   for run_func in $run_variants; do
     setup_mocks

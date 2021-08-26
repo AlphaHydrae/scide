@@ -151,16 +151,18 @@ fi
 
 # Determine path to configuration file.
 config_file=".screenrc"
-if test -f "$target"; then
+if test -n "$target" && test -f "$target"; then
   config_file="$target"
   test -r "$config_file" || fail 103 "$config_file is not readable"
-elif test -d "$target"; then
+elif test -n "$target" && test -d "$target"; then
   config_file="${target}/.screenrc"
   test -x "$target" || fail 103 "directory $target is not traversable"
   test -f "$config_file" || fail 102 ".screenrc not found in directory $target"
   test -r "$config_file" || fail 103 "$config_file is not readable"
-elif test -e "$target"; then
+elif test -n "$target" && test -e "$target"; then
   fail 104 "$target is not a file or directory"
+elif test -e "$config_file"; then
+  test -r "$config_file" || fail 103 "$config_file in $PWD is not readable"
 elif [[ "$auto" == "true" ]]; then
   # Generate temporary configuration file.
   config_file="${tmp_dir}/.screenrc"
@@ -172,8 +174,7 @@ elif [[ "$auto" == "true" ]]; then
     echo "$default_screenrc" > "$config_file"
   fi
 else
-  test -e "$config_file" || fail 102 "$config_file not found in current directory $PWD"
-  test -r "$config_file" || fail 103 "$config_file in $PWD is not readable"
+  fail 102 "$config_file not found in current directory $PWD"
 fi
 
 command=("$screen_bin" $screen_options -c "$config_file")
