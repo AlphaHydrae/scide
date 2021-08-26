@@ -18,10 +18,11 @@ version="$1"
 echo
 echo "Updating version to ${version}..."
 sed -i '' "s/version=.*/version=${version}/" bin/scide
+sed -i '' "s/\"message\": \".*\"/\"message\": \"${version}\"/" badge.json
 
 echo
 echo "Committing..."
-git add bin/scide
+git add badge.json bin/scide
 git commit -m "v${version}"
 
 echo
