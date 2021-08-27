@@ -18,7 +18,7 @@ version="$1"
 echo
 echo "Updating version to ${version}..."
 sed -i '' "s/version=.*/version=${version}/" bin/scide
-sed -i '' "s/\"message\": \".*\"/\"message\": \"${version}\"/" badge.json
+jq ".message = \"${version}\"" badge.json | sponge badge.json
 
 echo
 echo "Committing..."
