@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 set -e
 
+function command_available() {
+  local command="$1"
+  command -v "$command" &>/dev/null
+}
+
 function fail() {
   >&2 echo "$@"
   exit 1
 }
+
+for required_command in git jq sed sponge; do
+  command_available "$required_command" || fail "$required_command command not found in PATH"
+done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
