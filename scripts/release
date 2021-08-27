@@ -11,11 +11,13 @@ function fail() {
   exit 1
 }
 
-for required_command in git jq sed sponge; do
+for required_command in dgstore git gzip jq sed sponge; do
   command_available "$required_command" || fail "$required_command command not found in PATH"
 done
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+root_dir="$(dirname "$script_dir")"
+test -x "${root_dir}/bin/scide" || fail "Cannot find executable scide script in root directory ${root_dir}"
 
 test -z "$(git status --porcelain)" || fail "Commit changes before releasing"
 
@@ -23,6 +25,17 @@ version="$1"
 [ $# -lt 1 ] && fail "The version to release must be provided as the first argument (current: $(./bin/scide --version))"
 [ $# -gt 1 ] && fail "This script only takes one argument"
 [[ "$version" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]] || fail "Version '${version}' is not a valid semver version"
+
+echo
+echo "Preparing release..."
+release_dir="${root_dir}/release"
+test -d "$release_dir" && rm -fr "$release_dir"
+mkdir "$release_dir"
+compressed_release_script="${release_dir}/scide_v${version}.gz"
+cat "${root_dir}/bin/scide" | gzip -c > "${compressed_release_script}"
+dgstore "$compressed_release_script"
+signature_file="${compressed_release_script}.sig"
+gpg --output "$signature_file" --detach-sign "$compressed_release_script"
 
 echo
 echo "Updating version to ${version}..."
@@ -43,4 +56,6 @@ echo "Pushing..."
 git push --tags origin main
 
 # Release to homebrew.
-"$SCRIPT_DIR/homebrew"
+"$script_dir/homebrew"
+
+open "$release_dir"
