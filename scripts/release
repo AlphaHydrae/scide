@@ -21,8 +21,9 @@ test -x "${root_dir}/bin/scide" || fail "Cannot find executable scide script in 
 
 test -z "$(git status --porcelain)" || fail "Commit changes before releasing"
 
+current_version="$(./bin/scide --version)"
 version="$1"
-[ $# -lt 1 ] && fail "The version to release must be provided as the first argument (current: $(./bin/scide --version))"
+[ $# -lt 1 ] && fail "The version to release must be provided as the first argument (current: $current_version)"
 [ $# -gt 1 ] && fail "This script only takes one argument"
 [[ "$version" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]] || fail "Version '${version}' is not a valid semver version"
 
@@ -38,8 +39,9 @@ signature_file="${compressed_release_script}.sig"
 gpg --output "$signature_file" --detach-sign "$compressed_release_script"
 
 echo
-echo "Updating version to ${version}..."
+echo "Updating version from ${current_version} to ${version}..."
 sed -i '' "s/version=.*/version=${version}/" bin/scide
+sed -i '' "s/v.*\/scide_v.*.gz/v${version}\/scide_v${version}.gz/" README.md
 jq ".message = \"${version}\"" badge.json | sponge badge.json
 
 echo
