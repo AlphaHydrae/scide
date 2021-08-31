@@ -92,7 +92,7 @@ With [cURL](https://curl.se):
 ```bash
 PREFIX=/usr/local/bin \
   FROM=https://github.com/AlphaHydrae/scide/releases/download && \
-  curl -sSL $FROM/v2.1.1/scide_v2.1.1.gz | gunzip -c > $PREFIX/scide && \
+  curl -sSL $FROM/v2.1.2/scide_v2.1.2.gz | gunzip -c > $PREFIX/scide && \
   chmod +x $PREFIX/scide
 ```
 
@@ -101,7 +101,7 @@ With [Wget](https://www.gnu.org/software/wget/):
 ```bash
 PREFIX=/usr/local/bin \
   FROM=https://github.com/AlphaHydrae/scide/releases/download && \
-  wget -qO- $FROM/v2.1.1/scide_v2.1.1.gz | gunzip -c > $PREFIX/scide && \
+  wget -qO- $FROM/v2.1.2/scide_v2.1.2.gz | gunzip -c > $PREFIX/scide && \
   chmod +x $PREFIX/scide
 ```
 

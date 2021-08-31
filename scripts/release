@@ -11,7 +11,7 @@ function fail() {
   exit 1
 }
 
-for required_command in dgstore git gzip jq sed sponge; do
+for required_command in dgstore gh git gzip jq sed sponge; do
   command_available "$required_command" || fail "$required_command command not found in PATH"
 done
 
@@ -28,17 +28,6 @@ version="$1"
 [[ "$version" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]] || fail "Version '${version}' is not a valid semver version"
 
 echo
-echo "Preparing release..."
-release_dir="${root_dir}/release"
-test -d "$release_dir" && rm -fr "$release_dir"
-mkdir "$release_dir"
-compressed_release_script="${release_dir}/scide_v${version}.gz"
-cat "${root_dir}/bin/scide" | gzip -c > "${compressed_release_script}"
-dgstore "$compressed_release_script"
-signature_file="${compressed_release_script}.sig"
-gpg --output "$signature_file" --detach-sign "$compressed_release_script"
-
-echo
 echo "Updating version from ${current_version} to ${version}..."
 sed -i '' "s/version=.*/version=${version}/" bin/scide
 sed -i '' "s/v.*\/scide_v.*.gz/v${version}\/scide_v${version}.gz/" README.md
@@ -46,7 +35,7 @@ jq ".message = \"${version}\"" badge.json | sponge badge.json
 
 echo
 echo "Committing..."
-git add badge.json bin/scide
+git add badge.json bin/scide README.md
 git commit -m "v${version}"
 
 echo
@@ -57,7 +46,23 @@ echo
 echo "Pushing..."
 git push --tags origin main
 
+echo
+echo "Preparing release..."
+release_dir="${root_dir}/release"
+test -d "$release_dir" && rm -f "${release_dir}/scide_"*
+mkdir -p "$release_dir"
+compressed_release_script="${release_dir}/scide_v${version}.gz"
+cat "${root_dir}/bin/scide" | gzip -c > "${compressed_release_script}"
+dgstore "$compressed_release_script"
+signature_file="${compressed_release_script}.sig"
+gpg --output "$signature_file" --detach-sign "$compressed_release_script"
+
+echo
+echo "Creating draft release..."
+gh release create "v${version}" --draft --notes-file RELEASE.md --title "v${version}" release/scide_*
+
 # Release to homebrew.
 "$script_dir/homebrew"
 
 open "$release_dir"
+open "https://github.com/AlphaHydrae/scide/releases/tag/v${version}"
