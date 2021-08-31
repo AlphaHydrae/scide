@@ -65,4 +65,4 @@ gh release create "v${version}" --draft --notes-file RELEASE.md --title "v${vers
 "$script_dir/homebrew"
 
 open "$release_dir"
-open "https://github.com/AlphaHydrae/scide/releases/tag/v${version}"
+open "https://github.com/AlphaHydrae/scide/releases"
