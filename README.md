@@ -127,7 +127,7 @@ Screen options:
 
 ## Exit codes
 
-Scide will exist with the following exit codes when known errors occur:
+Scide will exit with the following codes when known errors occur:
 
 | Code  | Description                                                                      |
 | :---- | :------------------------------------------------------------------------------- |
